@@ -1,0 +1,3 @@
+rootProject.name = 'architecture'
+include 'package-base'
+
