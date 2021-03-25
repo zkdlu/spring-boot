@@ -2,6 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
+      <module name="architecture.domain-base.main" target="11" />
+      <module name="architecture.domain-base.test" target="11" />
       <module name="architecture.main" target="1.8" />
       <module name="architecture.test" target="1.8" />
     </bytecodeTargetLevel>
