@@ -1,8 +1,7 @@
 package com.zkdlu.demo.domain.order;
 
 public enum OrderState {
-    PREPARE("준비 중"),
-    PAYED("결제 완료"),
+    PREPARE("결제 대기"),
     DELIVERING ("배송 중"),
     COMPLETE("주문 완료"),
     CANCELED("취소");

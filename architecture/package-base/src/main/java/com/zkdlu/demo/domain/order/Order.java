@@ -1,23 +1,22 @@
 package com.zkdlu.demo.domain.order;
 
 import com.zkdlu.demo.domain.shop.Product;
+import lombok.Getter;
+import org.hibernate.type.OrderedSetType;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class Order {
     private long id;
     private OrderState orderState;
     private LocalDateTime orderedAt;
-    private Product orderItem;
+    private OrderItem orderItem;
 
-    private Order() {
-        id = 1L;
+    public Order(long id, OrderItem orderItem) {
+        this.id = id;
+        this.orderItem = orderItem;
         orderedAt = LocalDateTime.now();
-        orderItem = new Product(2L, "컴퓨터", 10000);
-    }
-
-    public static Order createOrder() {
-        return new Order();
     }
 
     public void place() {
@@ -30,8 +29,16 @@ public class Order {
     }
 
     private void validate() {
-        if (!orderItem.canOrder()) {
+        if (!orderItem.getProduct().canOrder()) {
             throw new IllegalStateException("재고가 없습니다.");
         }
+    }
+
+    public void payed() {
+        orderState = OrderState.DELIVERING;
+    }
+
+    public void delivery() {
+        orderState = OrderState.COMPLETE;
     }
 }
