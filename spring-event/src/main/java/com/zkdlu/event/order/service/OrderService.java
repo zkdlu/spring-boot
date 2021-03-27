@@ -1,23 +1,24 @@
 package com.zkdlu.event.order.service;
 
+import com.zkdlu.event.infra.sms.SmsClient;
 import com.zkdlu.event.order.domain.Order;
 import com.zkdlu.event.order.domain.OrderRepository;
+import com.zkdlu.event.order.event.OrderEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final ApplicationEventPublisher publisher;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public OrderService(OrderRepository orderRepository, ApplicationEventPublisher publisher) {
-        this.orderRepository = orderRepository;
-        this.publisher = publisher;
-    }
+    public void placeOrder(OrderRequest orderRequest) {
+        Order order = new Order(orderRequest.getOrderId());
+        order.place();
+        orderRepository.save(order);
 
-    public void pay(long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(RuntimeException::new);
-
-        order.pay(publisher);
+        eventPublisher.publishEvent(new OrderEvent(this, orderRequest.getOrderId()));
     }
 }
