@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class OrderDetail {
-    private long orderId;
+public class ReceiptResult {
+    private String orderId;
     private int money;
 }

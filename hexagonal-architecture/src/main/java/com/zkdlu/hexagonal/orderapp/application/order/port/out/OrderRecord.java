@@ -1,11 +1,11 @@
-package com.zkdlu.hexagonal.orderapp.application.order.port.in;
+package com.zkdlu.hexagonal.orderapp.application.order.port.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class OrderResult {
+public class OrderRecord {
     private String orderId;
     private int money;
 }

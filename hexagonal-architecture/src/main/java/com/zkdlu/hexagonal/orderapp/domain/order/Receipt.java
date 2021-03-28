@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public class Receipt {
-    private long orderId;
+    private String orderId;
     private int money;
 
-    public Receipt(long orderId, int money) {
+    public Receipt(String orderId, int money) {
         this.orderId = orderId;
         this.money = money;
     }
