@@ -1,10 +1,4 @@
 spring:
-  profiles:
-    active: local
-
----
-
-spring:
   profiles: h2
   datasource:
     hikari:
