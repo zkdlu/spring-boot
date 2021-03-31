@@ -13,7 +13,7 @@ public class Scheduler {
     0-59   0-59   0-23  1-31   1-12  0-7
      */
     @Scheduled(cron = "* * * * * *")
-    public void cronJob() {
+    public void cronJob(String test) {
         System.out.println("cron : " + LocalDateTime.now().toString());
     }
 
