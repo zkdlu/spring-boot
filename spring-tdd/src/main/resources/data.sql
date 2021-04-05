@@ -1,0 +1,1 @@
+insert into shops (min_price, name, open, shop_id) values (1000, '건', true, 'id1');
