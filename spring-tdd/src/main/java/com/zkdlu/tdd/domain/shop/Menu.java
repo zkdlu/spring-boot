@@ -22,11 +22,10 @@ public class Menu {
     @JoinColumn(name = "MENU_ID")
     private Shop shop;
 
-    private Menu(String id, String name, int price, Shop shop) {
+    public Menu(String id, String name, int price) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.shop = shop;
         
         verifyMenu();
     }

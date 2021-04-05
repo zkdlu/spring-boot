@@ -22,6 +22,13 @@ public class OrderItem {
     @Column(name = "COUNT")
     private int count;
 
+    public OrderItem(String id, String name, Menu menu, int count) {
+        this.id = id;
+        this.name = name;
+        this.menu = menu;
+        this.count = count;
+    }
+
     public void verify() {
         if (!name.equals(menu.getName())) {
             throw new IllegalStateException("기존 메뉴가 변경 됨");

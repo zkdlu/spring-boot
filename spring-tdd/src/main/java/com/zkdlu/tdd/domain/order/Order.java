@@ -25,10 +25,6 @@ public class Order {
     @Column(name = "ORDER_ID")
     private String id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "ORDER_STATE")
-    private OrderState state;
-
     @ManyToOne
     @JoinColumn(name = "SHOP_ID")
     private Shop shop;
@@ -37,33 +33,55 @@ public class Order {
     @JoinColumn(name = "ORDER_ID")
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ORDER_STATE")
+    private OrderState state;
+
     @Builder
-    public Order(String id) {
+    public Order(String id, Shop shop, List<OrderItem> orderItems) {
         this.id = id;
+        this.shop = shop;
+        this.orderItems = orderItems;
     }
 
     public void place() {
         verifyPlace();
+
         state = OrderState.결제대기;
     }
 
-    public void accept() {
-        state = OrderState.조리중;
-    }
-
     public void payed() {
+        if (state != OrderState.결제대기)
+            throw new IllegalStateException("이미 결제 되었습니다.");
+
         state = OrderState.수락대기;
     }
 
+    public void accept() {
+        if (state != OrderState.수락대기)
+            throw new IllegalStateException("수락전에만 수락 가능합니다.");
+
+        state = OrderState.조리중;
+    }
+
     public void delivery() {
+        if (state != OrderState.조리중)
+            throw new IllegalStateException("조리가 완료된 경우에만 배송 가능합니다.");
+
         state = OrderState.배송중;
     }
 
     public void complete() {
+        if (state != OrderState.배송중)
+            throw new IllegalStateException("배송이 완료되어야 합니다.");
+
         state = OrderState.완료;
     }
 
     public void cancel() {
+        if (state != OrderState.결제대기 && state != OrderState.수락대기)
+            throw new IllegalStateException("주문이 수락 된 경우 취소할 수 없습니다.");
+
         state = OrderState.취소;
     }
 
