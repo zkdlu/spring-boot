@@ -87,7 +87,7 @@ class OrderServiceTest {
         String orderId = orderService.payedOrder("order-1");
 
         //then
-        assertThat(order.getState()).isEqualTo(Order.OrderState.수락대기);
+        assertThat(orderId).isEqualTo("order-1");
     }
 
     @Test

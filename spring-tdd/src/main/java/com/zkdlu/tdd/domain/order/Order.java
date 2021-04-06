@@ -25,7 +25,7 @@ public class Order {
     @JoinColumn(name = "SHOP_ID")
     private Shop shop;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "ORDER_ID")
     private List<OrderItem> orderItems = new ArrayList<>();
 

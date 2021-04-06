@@ -10,5 +10,4 @@ public class OrderDto {
     private String id;
     private String shopId;
     private List<String> menuIds = new ArrayList<>();
-
 }
