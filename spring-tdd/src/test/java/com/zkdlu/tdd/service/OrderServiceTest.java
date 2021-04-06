@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -32,6 +33,7 @@ class OrderServiceTest {
     private OrderService orderService;
 
     private Shop shop;
+    private OrderDto orderDto;
 
     @BeforeEach
     void setUp() {
@@ -41,20 +43,14 @@ class OrderServiceTest {
         shop.addMenu(new Menu("menu-2", "라면", 2000));
         shop.addMenu(new Menu("menu-3", "고기", 3000));
         shop.open();
-    }
 
-    OrderDto getOrderDto(String orderId) {
-        OrderDto orderDto = new OrderDto();
-        orderDto.setId(orderId);
+        orderDto = new OrderDto();
+        orderDto.setId("order-1");
         orderDto.setShopId(shop.getId());
         orderDto.setMenuIds(shop.getMenus().stream().map(Menu::getName).collect(Collectors.toList()));
-
-        return orderDto;
     }
 
-    Order getOrder(String orderId) {
-        OrderDto orderDto = getOrderDto(orderId);
-
+    Order getOrder() {
         var orderItems = shop.getMenus().stream()
                 .map(OrderItem::new)
                 .collect(Collectors.toList());
@@ -70,8 +66,7 @@ class OrderServiceTest {
     @DisplayName("shop의 모든 메뉴를 선택하여 주문 요청을 한다.")
     void placeOrder() {
         //given
-        OrderDto orderDto = getOrderDto("order-1");
-        Mockito.when(shopRepository.findById("shop-1")).thenReturn(Optional.of(shop));
+        given(shopRepository.findById("shop-1")).willReturn(Optional.of(shop));
 
         //when
         String orderId = orderService.placeOrder(orderDto);
@@ -84,9 +79,9 @@ class OrderServiceTest {
     @DisplayName("주문번호에 해당하는 주문을 결제한다.")
     void payedOrder() {
         //given
-        Order order = getOrder("order-1");
+        Order order = getOrder();
         order.place();
-        Mockito.when(orderRepository.findById("order-1")).thenReturn(Optional.of(order));
+        given(orderRepository.findById("order-1")).willReturn(Optional.of(order));
 
         //when
         String orderId = orderService.payedOrder("order-1");
@@ -99,10 +94,10 @@ class OrderServiceTest {
     @DisplayName("점주는 해당 주문을 수락한다.")
     void acceptOrder() {
         //given
-        Order order = getOrder("order-1");
+        Order order = getOrder();
         order.place();
         order.payed();
-        Mockito.when(orderRepository.findById("order-1")).thenReturn(Optional.of(order));
+        given(orderRepository.findById("order-1")).willReturn(Optional.of(order));
 
         //when
         String orderId = orderService.acceptOrder("order-1");
@@ -115,11 +110,11 @@ class OrderServiceTest {
     @DisplayName("주문번호에 해당하는 주문 배송을 시작한다.")
     void deliveryOrder() {
         //given
-        Order order = getOrder("order-1");
+        Order order = getOrder();
         order.place();
         order.payed();
         order.accept();
-        Mockito.when(orderRepository.findById("order-1")).thenReturn(Optional.of(order));
+        given(orderRepository.findById("order-1")).willReturn(Optional.of(order));
 
         //when
         String orderId = orderService.deliveryOrder("order-1");
@@ -132,12 +127,12 @@ class OrderServiceTest {
     @DisplayName("주문자는 물건을 받고 주문 완료를 누른다.")
     void completeOrder() {
         //given
-        Order order = getOrder("order-1");
+        Order order = getOrder();
         order.place();
         order.payed();
         order.accept();
         order.delivery();
-        Mockito.when(orderRepository.findById("order-1")).thenReturn(Optional.of(order));
+        given(orderRepository.findById("order-1")).willReturn(Optional.of(order));
 
         //when
         String orderId = orderService.completeOrder("order-1");
@@ -150,9 +145,9 @@ class OrderServiceTest {
     @DisplayName("결제 전에 주문을 취소한다.")
     void cancelOrder() {
         //given
-        Order order = getOrder("order-1");
+        Order order = getOrder();
         order.place();
-        Mockito.when(orderRepository.findById("order-1")).thenReturn(Optional.of(order));
+        given(orderRepository.findById("order-1")).willReturn(Optional.of(order));
 
         //when
         String orderId = orderService.cancelOrder("order-1");
