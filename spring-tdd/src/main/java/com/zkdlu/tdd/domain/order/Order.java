@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "ORDERS")
 public class Order {
-    enum OrderState { 결제대기, 수락대기, 조리중, 배송중, 완료, 취소 }
+    public enum OrderState { 결제대기, 수락대기, 조리중, 배송중, 완료, 취소 }
 
     @Id
     @Column(name = "ORDER_ID")

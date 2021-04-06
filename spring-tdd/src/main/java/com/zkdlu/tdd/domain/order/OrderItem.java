@@ -22,6 +22,13 @@ public class OrderItem {
     @Column(name = "COUNT")
     private int count;
 
+    public OrderItem(Menu menu) {
+        this.id = menu.getId();
+        this.name = menu.getName();
+        this.menu = menu;
+        this.count = 1;
+    }
+
     public OrderItem(String id, String name, Menu menu, int count) {
         this.id = id;
         this.name = name;
