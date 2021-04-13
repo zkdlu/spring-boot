@@ -21,11 +21,6 @@ class PersonQueryRepositoryTest {
     @Autowired
     private PersonQueryRepository personQueryRepository;
 
-    @AfterEach
-    void tearDown() {
-        personRepository.deleteAllInBatch();
-    }
-
     @Test
     @DisplayName("QueryDSL 테스트")
     public void queryDsl_Test() {

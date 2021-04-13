@@ -9,8 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.beans.PropertyVetoException;
-
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -25,9 +23,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
+                .antMatchers("/token/**").permitAll()
                 .anyRequest().authenticated()
             .and()
-                .oauth2Login()
+                .oauth2Login().loginPage("/token/expired")
                     .successHandler(successHandler)
                     .userInfoEndpoint().userService(oAuth2UserService);
 
