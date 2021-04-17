@@ -1,0 +1,10 @@
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+      circuitBreaker:
+        requestVolumeThreshold: 1 # 감시 시간 내 요청 수, 기본값 20
+        errorThresholdPercentage: 50 # 요청 대비 오류율, 기본값 50

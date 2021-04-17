@@ -1,6 +1,8 @@
 package com.zkdlu.display;
 
 public class Product {
+    public static final Product Empty = new Product("0", "[Sold out]", 0);
+
     private String id;
     private String name;
     private int price;
