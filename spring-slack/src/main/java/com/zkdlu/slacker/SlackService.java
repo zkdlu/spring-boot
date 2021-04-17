@@ -51,8 +51,6 @@ public class SlackService {
     }
 
     private void send(Map<String, Object> payload) {
-        HttpEntity<Map<String, Object>> data = new HttpEntity<>(payload);
-
         restTemplate.postForEntity(webHook, payload, String.class);
     }
 }
