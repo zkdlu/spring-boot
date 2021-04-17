@@ -12,7 +12,7 @@ public class SlackApi {
         this.slackService = slackService;
     }
 
-    @GetMapping("/{text}")
+    @GetMapping("/plane/{text}")
     public String knock(@PathVariable String text) {
         slackService.sendPlane(text);
 
@@ -22,6 +22,20 @@ public class SlackApi {
     @GetMapping("/link/{text}")
     public String link(@PathVariable String text) {
         slackService.sendLink(text);
+
+        return "knock knock link";
+    }
+
+    @GetMapping("/emoji/{text}")
+    public String custom(@PathVariable String text) {
+        slackService.sendEmoji(text);
+
+        return "knock knock link";
+    }
+
+    @GetMapping("/icon/{text}")
+    public String icon(@PathVariable String text) {
+        slackService.sendIcon(text);
 
         return "knock knock link";
     }

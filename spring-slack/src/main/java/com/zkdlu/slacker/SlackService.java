@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,9 +36,23 @@ public class SlackService {
         send(payload);
     }
 
+    void sendIcon(String text) {
+        payload.put("text", text);
+        payload.put("icon_url", "https://avatars.githubusercontent.com/u/22608617?s=60&v=4");
+
+        send(payload);
+    }
+
+    void sendEmoji(String text) {
+        payload.put("text", text);
+        payload.put("icon_emoji", ":ghost");
+
+        send(payload);
+    }
+
     private void send(Map<String, Object> payload) {
         HttpEntity<Map<String, Object>> data = new HttpEntity<>(payload);
 
-        restTemplate.exchange(webHook, HttpMethod.POST, data, String.class);
+        restTemplate.postForEntity(webHook, payload, String.class);
     }
 }
