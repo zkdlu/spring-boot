@@ -9,14 +9,17 @@ import java.util.List;
 @Service
 public class DisplayService {
     private final RestTemplate restTemplate;
+    private final FeignProductService productProxy;
 
-    public DisplayService(RestTemplate restTemplate) {
+    public DisplayService(RestTemplate restTemplate, FeignProductService productProxy) {
         this.restTemplate = restTemplate;
+        this.productProxy = productProxy;
     }
 
     public List<Product> getProducts() {
-        var products = restTemplate.getForObject("http://localhost:8081/products", Product[].class);
-
-        return Arrays.asList(products);
+        return productProxy.getProducts();
+//        var products = restTemplate.getForObject("http://localhost:8081/products", Product[].class);
+//
+//        return Arrays.asList(products);
     }
 }

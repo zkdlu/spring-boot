@@ -20,11 +20,21 @@ subprojects {
 
     sourceCompatibility = 11
 
+    ext {
+        set('springCloudVersion', "Hoxton.SR9")
+    }
+
     repositories {
         mavenCentral()
     }
     dependencies {
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
     }
 }
 
@@ -35,6 +45,7 @@ project(':product-service') {
 }
 project(':display-service') {
     dependencies {
-
+        implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
     }
 }
