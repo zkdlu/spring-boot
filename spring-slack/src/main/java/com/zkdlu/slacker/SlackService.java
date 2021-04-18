@@ -1,54 +1,68 @@
 package com.zkdlu.slacker;
 
+import com.slack.api.Slack;
+import com.slack.api.model.block.Blocks;
+import com.slack.api.model.block.LayoutBlock;
+import com.slack.api.webhook.WebhookPayloads;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.slack.api.model.block.Blocks.divider;
+import static com.slack.api.model.block.Blocks.section;
+import static com.slack.api.model.block.composition.BlockCompositions.markdownText;
+import static com.slack.api.model.block.composition.BlockCompositions.plainText;
+import static com.slack.api.model.block.element.BlockElements.asElements;
+import static com.slack.api.model.block.element.BlockElements.button;
+import static com.slack.api.webhook.WebhookPayloads.payload;
+
 @Service
 public class SlackService {
     private final RestTemplate restTemplate;
-    private final Map<String, Object> payload;
+    private final Map<String, Object> pload;
 
     @Value("${slack.web-hook}")
     private String webHook;
 
     public SlackService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.payload = new HashMap<>();
-        payload.put("username", "실험용쥐");
-
-
+        this.pload = new HashMap<>();
+        //payload.put("username", "실험용쥐");
     }
 
     void sendPlane(String text) {
-        payload.put("text", text);
+        pload.put("username", "실험용 쥐");
+        pload.put("text", "테스트용 메시지 <https://zkdlu.tistory.com|링크>");
+        pload.put("icon_url", "https://avatars.githubusercontent.com/u/22608617?s=60&v=4");
+        //payload.put("text", text);
 
-        send(payload);
+        send(pload);
     }
 
     void sendLink(String text) {
-        payload.put("text", text + " <https://zkdlu.tistory.com|클릭> 하세요");
+        pload.put("text", text + " <https://zkdlu.tistory.com|클릭> 하세요");
 
-        send(payload);
+        send(pload);
     }
 
     void sendIcon(String text) {
-        payload.put("text", text);
-        payload.put("icon_url", "https://avatars.githubusercontent.com/u/22608617?s=60&v=4");
+        pload.put("text", text);
+        pload.put("icon_url", "https://avatars.githubusercontent.com/u/22608617?s=60&v=4");
 
-        send(payload);
+        send(pload);
     }
 
     void sendEmoji(String text) {
-        payload.put("text", text);
-        payload.put("icon_emoji", ":ghost");
+        pload.put("text", text);
+        pload.put("icon_emoji", ":ghost");
 
-        send(payload);
+        send(pload);
     }
 
     void sendAttatchments(String text) {
@@ -76,9 +90,9 @@ public class SlackService {
 
         List<Map<String, Object>> attachments = new ArrayList<>();
         attachments.add(attachment);
-        payload.put("attachments", attachments);
+        pload.put("attachments", attachments);
 
-        send(payload);
+        send(pload);
     }
 
     void sendButtons(String text) {
@@ -124,12 +138,40 @@ public class SlackService {
 
         List<Map<String, Object>> attachments = new ArrayList<>();
         attachments.add(attachment);
-        payload.put("attachments", attachments);
+        pload.put("attachments", attachments);
 
-        send(payload);
+        send(pload);
     }
 
     private void send(Map<String, Object> payload) {
-        restTemplate.postForEntity(webHook, payload, String.class);
+        restTemplate.postForObject(webHook, payload, String.class);
+    }
+
+    public void test() {
+        List<LayoutBlock> layoutBlocks = new ArrayList<>();
+        layoutBlocks.add(section(section -> section.text(markdownText("메시지에요"))));
+        layoutBlocks.add(divider());
+        layoutBlocks.add(Blocks.actions(actions -> actions
+                .elements(asElements(
+                        button(b -> b.text(plainText(pt -> pt.emoji(true).text("확인")))
+                                .value("확인")
+                                .style("primary")
+                                .actionId("action_success")
+                        ),
+                        button(b -> b.text(plainText(pt -> pt.emoji(true).text("거부")))
+                                .value("거부")
+                                .style("danger")
+                                .actionId("action_fail")
+                        )
+                ))
+        ));
+
+        try {
+            Slack.getInstance().send("webhook",
+                    WebhookPayloads.payload(p -> p.text("슬랙 메시지 ㄴㄴ").blocks(layoutBlocks)));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
