@@ -30,13 +30,27 @@ public class SlackApi {
     public String custom(@PathVariable String text) {
         slackService.sendEmoji(text);
 
-        return "knock knock link";
+        return "knock knock emoji";
     }
 
     @GetMapping("/icon/{text}")
     public String icon(@PathVariable String text) {
         slackService.sendIcon(text);
 
-        return "knock knock link";
+        return "knock knock icon";
+    }
+
+    @GetMapping("/attach/{text}")
+    public String attach(@PathVariable String text) {
+        slackService.sendAttatchments(text);
+
+        return "knock knock attach";
+    }
+
+    @GetMapping("/button/{text}")
+    public String button(@PathVariable String text) {
+        slackService.sendButtons(text);
+
+        return "knock knock attach";
     }
 }
