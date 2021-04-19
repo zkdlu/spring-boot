@@ -27,25 +27,22 @@ public class SlackBot {
     private static Set<Vote> votes = new HashSet<>();
 
     public String vote(String message) throws IOException {
-
         List<LayoutBlock> layoutBlocks = Blocks.asBlocks(
-                getHeader(message),
+                getHeader("골라 주세요!"),
+                Blocks.divider(),
+                getSection(message),
                 Blocks.divider(),
                 Blocks.actions(getActionBlocks())
         );
 
-        Slack.getInstance().send("",
+        Slack.getInstance().send(" web hook ",
                 WebhookPayloads.payload(p -> p.text("골라 골라~").blocks(layoutBlocks)));
 
         return message;
     }
 
-    public String callback(String payload) throws IOException {
-        var blockPayload = GsonFactory.createSnakeCase()
-                .fromJson(payload, BlockActionPayload.class);
-
+    public String callbackVote(BlockActionPayload blockPayload) throws IOException {
         var user = blockPayload.getUser().getUsername();
-        var channel = blockPayload.getChannel().getName();
         var actionId = blockPayload.getActions().get(0).getActionId();
 
         Vote vote = new Vote(user, actionId);
@@ -69,27 +66,15 @@ public class SlackBot {
         ActionResponseSender sender = new ActionResponseSender(Slack.getInstance());
         sender.send(blockPayload.getResponseUrl(), response);
 
-        return payload;
+        return user;
     }
 
     @NotNull
-    private List<LayoutBlock> getLayoutBlocks(String message) {
-        List<LayoutBlock> layoutBlocks = new ArrayList<>();
-        var title = Blocks.section(section -> section.text(BlockCompositions.markdownText(message)));
-
-        layoutBlocks.add(title);
-        layoutBlocks.add(Blocks.divider());
-
-        return layoutBlocks;
+    private LayoutBlock getSection(String message) {
+        return Blocks.section(s -> s.text(
+                BlockCompositions.markdownText(message)));
     }
 
-    @NotNull
-    private List<BlockElement> getActionBlocks() {
-        List<BlockElement> actions = new ArrayList<>();
-        actions.add(getActionButton("확인", "ok", "primary", "action_success"));
-        actions.add(getActionButton("취소", "fail", "danger", "action_fail"));
-        return actions;
-    }
 
     @NotNull
     private LayoutBlock getHeader(String text) {
@@ -101,12 +86,22 @@ public class SlackBot {
 
     @NotNull
     private TextObject getField(Vote vote) {
-        return markdownText("*" + vote.getUser() + "*\n" + vote.getActionId());
+        return BlockCompositions.markdownText("*" +
+                vote.getUser() + "*\n" +
+                (vote.getActionId().equals("action_success") ? "동의" : "거부"));
     }
 
     @NotNull
     private LayoutBlock getFieldSection(List<TextObject> fields) {
         return Blocks.section(s -> s.fields(fields));
+    }
+
+    @NotNull
+    private List<BlockElement> getActionBlocks() {
+        List<BlockElement> actions = new ArrayList<>();
+        actions.add(getActionButton("확인", "ok", "primary", "action_success"));
+        actions.add(getActionButton("취소", "fail", "danger", "action_fail"));
+        return actions;
     }
 
     @NotNull

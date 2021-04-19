@@ -1,5 +1,7 @@
 package com.zkdlu.slacker;
 
+import com.slack.api.app_backend.interactive_components.payload.BlockActionPayload;
+import com.slack.api.util.json.GsonFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,9 @@ public class SlackApi {
 
     @PostMapping(value = "/slack/callback", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String callback(@RequestParam String payload) throws IOException {
-        return slackBot.callback(payload);
+        var blockPayload = GsonFactory.createSnakeCase()
+                .fromJson(payload, BlockActionPayload.class);
+
+        return slackBot.callbackVote(blockPayload);
     }
 }
