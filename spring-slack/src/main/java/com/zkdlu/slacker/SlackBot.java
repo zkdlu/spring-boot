@@ -7,6 +7,7 @@ import com.slack.api.app_backend.interactive_components.response.ActionResponse;
 import com.slack.api.model.block.Blocks;
 import com.slack.api.model.block.LayoutBlock;
 import com.slack.api.model.block.composition.BlockCompositions;
+import com.slack.api.model.block.composition.TextObject;
 import com.slack.api.model.block.element.BlockElement;
 import com.slack.api.model.block.element.BlockElements;
 import com.slack.api.util.json.GsonFactory;
@@ -15,20 +16,25 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static com.slack.api.model.block.Blocks.section;
 import static com.slack.api.model.block.composition.BlockCompositions.markdownText;
 import static com.slack.api.model.block.composition.BlockCompositions.plainText;
 
 @Service
 public class SlackBot {
-    public String vote(String message) throws IOException {
-        List<LayoutBlock> layoutBlocks = getLayoutBlocks(message);
-        layoutBlocks.add(Blocks.actions(getActionBlocks()));
+    private static Set<Vote> votes = new HashSet<>();
 
-        Slack.getInstance().send("",
+    public String vote(String message) throws IOException {
+
+        List<LayoutBlock> layoutBlocks = Blocks.asBlocks(
+                getHeader(message),
+                Blocks.divider(),
+                Blocks.actions(getActionBlocks())
+        );
+
+        Slack.getInstance().send("https://hooks.slack.com/services/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",
                 WebhookPayloads.payload(p -> p.text("골라 골라~").blocks(layoutBlocks)));
 
         return message;
@@ -42,11 +48,22 @@ public class SlackBot {
         var channel = blockPayload.getChannel().getName();
         var actionId = blockPayload.getActions().get(0).getActionId();
 
-        var blockLayouts = getLayoutBlocks(user + "님이 " + (actionId.equals("action_success") ? "[승인]" : "[거부]" + " 하였습니다."));
+        Vote vote = new Vote(user, actionId);
+        votes.add(vote);
+
+        var fields = votes.stream()
+                .map(this::getField)
+                .collect(Collectors.toList());
+
+        List<LayoutBlock> blocks = Blocks.asBlocks(
+                getHeader("집계 결과"),
+                Blocks.divider(),
+                getFieldSection(fields)
+        );
 
         ActionResponse response = ActionResponse.builder()
                 .replaceOriginal(false)
-                .blocks(blockLayouts)
+                .blocks(blocks)
                 .build();
 
         ActionResponseSender sender = new ActionResponseSender(Slack.getInstance());
@@ -69,13 +86,31 @@ public class SlackBot {
     @NotNull
     private List<BlockElement> getActionBlocks() {
         List<BlockElement> actions = new ArrayList<>();
-        actions.add(getButton("확인", "ok", "primary", "action_success"));
-        actions.add(getButton("취소", "fail", "danger", "action_fail"));
+        actions.add(getActionButton("확인", "ok", "primary", "action_success"));
+        actions.add(getActionButton("취소", "fail", "danger", "action_fail"));
         return actions;
     }
 
     @NotNull
-    private BlockElement getButton(String plainText, String value, String style, String actionId) {
+    private LayoutBlock getHeader(String text) {
+        return Blocks.header(h -> h.text(
+                BlockCompositions.plainText(pt -> pt
+                        .emoji(true)
+                        .text(text))));
+    }
+
+    @NotNull
+    private TextObject getField(Vote vote) {
+        return markdownText("*" + vote.getUser() + "*\n" + vote.getActionId());
+    }
+
+    @NotNull
+    private LayoutBlock getFieldSection(List<TextObject> fields) {
+        return Blocks.section(s -> s.fields(fields));
+    }
+
+    @NotNull
+    private BlockElement getActionButton(String plainText, String value, String style, String actionId) {
         return BlockElements.button(b -> b.text(plainText(plainText, true))
                 .value(value)
                 .style(style)
