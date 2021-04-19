@@ -11,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 import static com.slack.api.model.block.Blocks.section;
 import static com.slack.api.model.block.composition.BlockCompositions.markdownText;
@@ -20,18 +18,16 @@ import static com.slack.api.model.block.composition.BlockCompositions.markdownTe
 @RestController
 public class SlackApi {
     private final SlackService slackService;
-    private final ObjectMapper mapper;
+    private final SlackBot slackBot;
 
-    public SlackApi(SlackService slackService, ObjectMapper mapper) {
+    public SlackApi(SlackService slackService, SlackBot slackBot) {
         this.slackService = slackService;
-        this.mapper = mapper;
+        this.slackBot = slackBot;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        slackService.test();
-
-        return "test";
+    @GetMapping("/vote/{message}")
+    public String test(@PathVariable String message) throws IOException {
+        return slackBot.vote(message);
     }
 
     @PostMapping(value = "/slack/callback", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -66,47 +62,5 @@ public class SlackApi {
         }
 
         return "block kit";
-    }
-
-    @GetMapping("/plane/{text}")
-    public String knock(@PathVariable String text) {
-        slackService.sendPlane(text);
-
-        return "knock knock";
-    }
-
-    @GetMapping("/link/{text}")
-    public String link(@PathVariable String text) {
-        slackService.sendLink(text);
-
-        return "knock knock link";
-    }
-
-    @GetMapping("/emoji/{text}")
-    public String custom(@PathVariable String text) {
-        slackService.sendEmoji(text);
-
-        return "knock knock emoji";
-    }
-
-    @GetMapping("/icon/{text}")
-    public String icon(@PathVariable String text) {
-        slackService.sendIcon(text);
-
-        return "knock knock icon";
-    }
-
-    @GetMapping("/attach/{text}")
-    public String attach(@PathVariable String text) {
-        slackService.sendAttatchments(text);
-
-        return "knock knock attach";
-    }
-
-    @GetMapping("/button/{text}")
-    public String button(@PathVariable String text) {
-        slackService.sendButtons(text);
-
-        return "knock knock attach";
     }
 }

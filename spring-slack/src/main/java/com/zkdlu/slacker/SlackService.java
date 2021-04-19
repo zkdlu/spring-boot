@@ -167,7 +167,7 @@ public class SlackService {
         ));
 
         try {
-            Slack.getInstance().send("webhook",
+            Slack.getInstance().send("",
                     WebhookPayloads.payload(p -> p.text("슬랙 메시지 ㄴㄴ").blocks(layoutBlocks)));
 
         } catch (IOException e) {
