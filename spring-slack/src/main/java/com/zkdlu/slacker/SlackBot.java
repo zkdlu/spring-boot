@@ -34,7 +34,7 @@ public class SlackBot {
                 Blocks.actions(getActionBlocks())
         );
 
-        Slack.getInstance().send("https://hooks.slack.com/services/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",
+        Slack.getInstance().send("",
                 WebhookPayloads.payload(p -> p.text("골라 골라~").blocks(layoutBlocks)));
 
         return message;
