@@ -45,6 +45,7 @@ project(':product-service') {
 }
 project(':display-service') {
     dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
         implementation 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon'
         implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
         implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'

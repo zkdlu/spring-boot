@@ -18,12 +18,12 @@ public class DisplayService {
         this.productProxy = productProxy;
     }
 
-    //@HystrixCommand(fallbackMethod = "getProductsFallback")
+    @HystrixCommand(fallbackMethod = "getProductsFallback")
     public List<Product> getProducts() {
-        return productProxy.getProducts();
-//        var products = restTemplate.getForObject("http://product/products", Product[].class);
-//
-//        return Arrays.asList(products);
+        //return productProxy.getProducts();
+        var products = restTemplate.getForObject("http://product/products", Product[].class);
+
+        return Arrays.asList(products);
     }
     
     public List<Product> getProductsFallback() {
