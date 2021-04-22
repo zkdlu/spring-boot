@@ -23,7 +23,7 @@ hystrix:
 
 product:
   ribbon:
-    listOfServers: localhost:8081, localhost:8082
+    ConnectTimeout: 3000
 
 spring:
   application:
