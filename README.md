@@ -10,4 +10,5 @@
 8. [MSA-Service Mesh](https://zkdlu.tistory.com/13)
 9. [MSA-Circuit Breaker](https://zkdlu.tistory.com/14)
 10. [MSA-Load Balancer](https://zkdlu.tistory.com/15)
-11. [Slack 연동하기](https://zkdlu.github.io/2021-04-18/Spring-boot-Slack/)
+11. [MSA-Service Discovery](https://zkdlu.tistory.com/17)
+12. [Slack 연동하기](https://zkdlu.github.io/2021-04-18/Spring-boot-Slack/)
