@@ -1,3 +1,4 @@
 rootProject.name = 'payment'
 include 'bootpay'
+include 'import'
 
