@@ -17,7 +17,7 @@ public class Consumer implements ConsumerSeekAware {
 
     @KafkaListener(topics = "${kafka.topics.test}", groupId = "${spring.kafka.consumer.group-id}")
     void listen(String message) {
-        log.info("{}", message);
+        log.info("1. {}", message);
     }
 
     @Override
