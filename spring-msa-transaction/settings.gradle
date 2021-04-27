@@ -1,3 +1,5 @@
 rootProject.name = 'transaction'
 include 'web'
+include 'service-display'
+include 'service-product'
 
