@@ -20,11 +20,11 @@
 <body>
 <div class="container" id="app" v-cloak>
     <h1>상품 목록</h1>
-    <div class="list-group" id="wrapper" style="overflow: auto;" @scroll="onScroll">
+    <div class="list-group" style="overflow: auto;">
         <div v-for="items in groupedItems" class="row">
             <div v-for="item in items" class="col-4">
                 <div class="panel">
-                    <img v-bind:src="item.img">
+                    <img v-bind:src="item.img" v-bind:id="item.id" style="margin:4px;">
                     {{item.name}}
                 </div>
             </div>
@@ -32,15 +32,11 @@
     </div>
     <transition name="fade">
         <div class="loading" v-show="loading">
-            <span class="fa fa-spinner fa-spin"></span> Loading
+            <span style="font-size:32px;">Loading</span>
         </div>
     </transition>
-    <button @click="limitNumber += 2">Show more</button>
 </div>
 <script>
-    var wrapper = document.getElementById("app");
-    var content = document.getElementById("wrapper");
-
     var vm = new Vue({
         el: '#app',
         data: {
@@ -49,12 +45,12 @@
             items: []
         },
         created() {
-            this.initItems();
+            this.getItems();
         },
         mounted() {
             const that = this;
             window.addEventListener('scroll', function(e) {
-                if (window.scrollY >= 265 + (that.limitNumber - 10) * 100) {
+                if (window.scrollY >= 235 + (that.limitNumber - 10) * 100) {
                     that.loadMore();
                 }
             });
@@ -78,7 +74,7 @@
             }
         },
         methods: {
-            initItems: function() {
+            getItems: function() {
                 for (let i = 1; i <= 1000; i++) {
                     let item = {
                         "id": i,
@@ -88,18 +84,12 @@
                     this.items.push(item);
                 }
             },
-            getItems: function() {
-
-            },
             loadMore: function() {
                 this.loading = true;
                 setTimeout(e => {
                     this.limitNumber += 2;
                     this.loading = false;
                 }, 2000);
-            },
-            onScroll ({ target: { scrollTop, clientHeight, scrollHeight }}) {
-                console.log('ddd');
             }
         }
     });
