@@ -1,37 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
-    <title>Thymeleaf 예제</title>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.min.js"></script>
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <title>구매하기</title>
 </head>
 <body>
-<h1>Thymeleaf 예제</h1>
-
-<script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
-<script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
-<script src="/webjars/bootstrap/4.3.1/dist/js/bootstrap.min.js"></script>
-<script src="/webjars/sockjs-client/1.1.2/sockjs.min.js"></script>
+<div class="container" id="app" v-cloak>
+    <h1>상품 목록</h1>
+    <div class="list-group" id="wrapper" style="overflow: auto;" @scroll="onScroll">
+        <div v-for="items in groupedItems" class="row">
+            <div v-for="item in items" class="col-4">
+                <div class="panel">
+                    <img v-bind:src="item.img">
+                    {{item.name}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <transition name="fade">
+        <div class="loading" v-show="loading">
+            <span class="fa fa-spinner fa-spin"></span> Loading
+        </div>
+    </transition>
+    <button @click="limitNumber += 2">Show more</button>
+</div>
 <script>
+    var wrapper = document.getElementById("app");
+    var content = document.getElementById("wrapper");
+
     var vm = new Vue({
         el: '#app',
         data: {
-            room_name : '',
-            chatrooms: [
-            ]
+            loading: false,
+            limitNumber: 10,
+            items: []
         },
         created() {
-            this.findAllRoom();
+            this.initItems();
+        },
+        mounted() {
+            const that = this;
+            window.addEventListener('scroll', function(e) {
+                if (window.scrollY >= 265 + (that.limitNumber - 10) * 100) {
+                    that.loadMore();
+                }
+            });
+        },
+        computed: {
+            groupedItems() {
+                const chunked = []
+
+                // 주어진 배열을 탐색
+                for (let element of this.items) {
+                    const last = chunked[chunked.length - 1]
+
+                    if (!last || last.length === 3) {
+                        chunked.push([element])
+                    } else {
+                        last.push(element)
+                    }
+                }
+
+                return chunked.slice(0, this.limitNumber);
+            }
         },
         methods: {
-            findAllRoom: function() {
-                alert('1');
+            initItems: function() {
+                for (let i = 1; i <= 1000; i++) {
+                    let item = {
+                        "id": i,
+                        "name": "item" + i,
+                        "img": "https://placeimg.com/100/100/any"
+                    }
+                    this.items.push(item);
+                }
             },
-            enterRoom: function(roomId) {
-                var sender = prompt('대화명을 입력해 주세요.');
-                localStorage.setItem('wschat.sender',sender);
-                localStorage.setItem('wschat.roomId',roomId);
-                location.href="/chat/room/enter/"+roomId;
+            getItems: function() {
+
+            },
+            loadMore: function() {
+                this.loading = true;
+                setTimeout(e => {
+                    this.limitNumber += 2;
+                    this.loading = false;
+                }, 2000);
+            },
+            onScroll ({ target: { scrollTop, clientHeight, scrollHeight }}) {
+                console.log('ddd');
             }
         }
     });
