@@ -2,7 +2,7 @@
 <html xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
 
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
@@ -50,7 +50,8 @@
         mounted() {
             const that = this;
             window.addEventListener('scroll', function(e) {
-                if (window.scrollY >= 235 + (that.limitNumber - 10) * 100) {
+                console.log(window.scrollY);
+                if (window.scrollY >= 315 + (that.limitNumber - 10) * 100) {
                     that.loadMore();
                 }
             });
@@ -59,14 +60,13 @@
             groupedItems() {
                 const chunked = []
 
-                // 주어진 배열을 탐색
                 for (let element of this.items) {
                     const last = chunked[chunked.length - 1]
 
                     if (!last || last.length === 3) {
-                        chunked.push([element])
+                        chunked.push([element]);
                     } else {
-                        last.push(element)
+                        last.push(element);
                     }
                 }
 
@@ -76,17 +76,8 @@
         methods: {
             getItems: function() {
                 axios.get('http://localhost:8081/products').then(response => { 
-                    console.log(response.data);
                     this.items = response.data; 
                 });
-                // for (let i = 1; i <= 1000; i++) {
-                //     let item = {
-                //         "id": i,
-                //         "name": "item" + i,
-                //         "img": "https://placeimg.com/100/100/any"
-                //     }
-                //     this.items.push(item);
-                // }
             },
             loadMore: function() {
                 this.loading = true;

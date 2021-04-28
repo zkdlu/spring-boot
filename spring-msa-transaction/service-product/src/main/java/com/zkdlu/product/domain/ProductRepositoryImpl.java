@@ -8,25 +8,27 @@ import java.util.stream.Collectors;
 
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
-    private Set<Product> products = new HashSet<>();
+    private Set<Product> products = new LinkedHashSet<>();
 
     @PostConstruct
     public void init() {
-        products.add(Product.builder()
-                .id(UUID.randomUUID())
-                .name("옷")
-                .image("https://placeimg.com/100/100/any")
-                .build());
-        products.add(Product.builder()
-                .id(UUID.randomUUID())
-                .name("신발")
-                .image("https://placeimg.com/100/100/any")
-                .build());
-        products.add(Product.builder()
-                .id(UUID.randomUUID())
-                .name("장난감")
-                .image("https://placeimg.com/100/100/any")
-                .build());
+        for (int i = 0; i < 100; i++) {
+            products.add(Product.builder()
+                    .id(UUID.randomUUID())
+                    .name("옷" + i)
+                    .image("https://placeimg.com/100/100/any")
+                    .build());
+            products.add(Product.builder()
+                    .id(UUID.randomUUID())
+                    .name("신발" + i)
+                    .image("https://placeimg.com/100/100/any")
+                    .build());
+            products.add(Product.builder()
+                    .id(UUID.randomUUID())
+                    .name("장난감" + i)
+                    .image("https://placeimg.com/100/100/any")
+                    .build());
+        }
     }
 
     @Override
