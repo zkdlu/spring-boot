@@ -20,7 +20,7 @@
 <body>
 <div class="container" id="app" v-cloak>
     <h1>상품 목록</h1>
-    <div class="list-group" style="overflow: auto;">
+    <div id="parent" class="list-group" style="overflow: auto;">
         <div v-for="items in groupedItems" class="row">
             <div v-for="item in items" class="col-4">
                 <div class="panel">
@@ -49,9 +49,9 @@
         },
         mounted() {
             const that = this;
+            
             window.addEventListener('scroll', function(e) {
-                console.log(window.scrollY);
-                if (window.scrollY >= 315 + (that.limitNumber - 10) * 100) {
+                if (document.body.offsetHeight - window.innerHeight === window.scrollY) {
                     that.loadMore();
                 }
             });
