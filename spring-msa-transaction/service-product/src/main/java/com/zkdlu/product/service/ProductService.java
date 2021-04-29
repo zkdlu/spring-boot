@@ -15,4 +15,8 @@ public class ProductService {
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
+
+    public List<Product> getProductsByPage(int page) {
+        return productRepository.findAll(page);
+    }
 }

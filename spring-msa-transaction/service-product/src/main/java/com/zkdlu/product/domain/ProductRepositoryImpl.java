@@ -32,6 +32,14 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public List<Product> findAll(int page) {
+        return products.stream()
+                .skip(page * 42)
+                .limit(42)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Product> findAll() {
         return new ArrayList<>(products);
     }

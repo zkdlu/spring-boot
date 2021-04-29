@@ -42,6 +42,7 @@
         data: {
             loading: false,
             limitNumber: 10,
+            page: 0,
             items: []
         },
         created() {
@@ -49,7 +50,7 @@
         },
         mounted() {
             const that = this;
-            
+
             window.addEventListener('scroll', function(e) {
                 if (document.body.offsetHeight - window.innerHeight === window.scrollY) {
                     that.loadMore();
@@ -74,17 +75,24 @@
             }
         },
         methods: {
-            getItems: function() {
-                axios.get('http://localhost:8081/products').then(response => { 
-                    this.items = response.data; 
+            getItems: async function() {
+                await axios.get('http://localhost:8081/products/' + this.page).then(response => { 
+                    this.items = this.items.concat(response.data);
                 });
             },
             loadMore: function() {
                 this.loading = true;
+
                 setTimeout(e => {
-                    this.limitNumber += 2;
-                    this.loading = false;
+                    this.limitNumber += 14;
+                    this.page += 1;
+
+                    this.getItems().then(response => {
+                        this.loading = false;
+                    });
                 }, 2000);
+
+                
             }
         }
     });
