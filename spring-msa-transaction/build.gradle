@@ -33,3 +33,15 @@ project(':web') {
 
     }
 }
+
+project(':service-display') {
+    dependencies {
+
+    }
+}
+
+project(':service-product') {
+    dependencies {
+
+    }
+}

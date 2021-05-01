@@ -52,6 +52,7 @@
             const that = this;
 
             window.addEventListener('scroll', function(e) {
+                console.log(document.body.offsetHeight - window.innerHeight === window.scrollY);
                 if (document.body.offsetHeight - window.innerHeight === window.scrollY) {
                     that.loadMore();
                 }
