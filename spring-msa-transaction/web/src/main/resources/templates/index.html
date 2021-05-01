@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html>
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
@@ -15,7 +15,7 @@
             display: none;
         }
     </style>
-    <title>구매하기</title>
+    <title>상품목록</title>
 </head>
 <body>
 <div class="container" id="app" v-cloak>
@@ -23,9 +23,11 @@
     <div id="parent" class="list-group" style="overflow: auto;">
         <div v-for="items in groupedItems" class="row">
             <div v-for="item in items" class="col-4">
-                <div class="panel">
+                <div class="panel" v-on:click="enterOrder(item.id)">
                     <img v-bind:src="item.image" v-bind:id="item.id" style="margin:4px;">
-                    {{item.name}}
+                    <div>
+                        <span>제품명: {{item.name}}</span>,<span>남은수량: {{item.stock}}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,6 +78,9 @@
             }
         },
         methods: {
+            enterOrder: function(productId) {
+                location.href="/order/" + productId;
+            },
             getItems: async function() {
                 await axios.get('http://localhost:8081/products/' + this.page).then(response => { 
                     this.items = this.items.concat(response.data);
@@ -92,8 +97,6 @@
                         this.loading = false;
                     });
                 }, 2000);
-
-                
             }
         }
     });
