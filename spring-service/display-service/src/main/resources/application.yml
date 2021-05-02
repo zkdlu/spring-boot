@@ -25,13 +25,21 @@ product:
   ribbon:
     ConnectTimeout: 3000
 
-spring:
-  application:
-    name: display
-
 eureka:
   instance:
     prefer-ip-address: true
     client:
       service-url:
         defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: display
+  kafka:
+    consumer:
+      group-id: myGroup
+    bootstrap-servers: localhost:9092
+
+kafka:
+  topics:
+    test: order

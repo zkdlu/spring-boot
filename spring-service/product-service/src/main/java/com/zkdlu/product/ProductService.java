@@ -15,4 +15,13 @@ public class ProductService {
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
+
+    public Product orderProdcut(String productId) {
+        var product = productRepository.findById(productId)
+                .orElseThrow(IllegalAccessError::new);
+
+        product.order(1);
+        
+        return product;
+    }
 }

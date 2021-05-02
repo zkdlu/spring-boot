@@ -20,10 +20,7 @@ public class DisplayService {
 
     @HystrixCommand(fallbackMethod = "getProductsFallback")
     public List<Product> getProducts() {
-        //return productProxy.getProducts();
-        var products = restTemplate.getForObject("http://product/products", Product[].class);
-
-        return Arrays.asList(products);
+        return productProxy.getProducts();
     }
     
     public List<Product> getProductsFallback() {

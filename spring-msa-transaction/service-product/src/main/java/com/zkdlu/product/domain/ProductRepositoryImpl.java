@@ -17,16 +17,19 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .id(UUID.randomUUID())
                     .name("옷" + i)
                     .image("https://placeimg.com/100/100/any")
+                    .stock(i)
                     .build());
             products.add(Product.builder()
                     .id(UUID.randomUUID())
                     .name("신발" + i)
+                    .stock(i)
                     .image("https://placeimg.com/100/100/any")
                     .build());
             products.add(Product.builder()
                     .id(UUID.randomUUID())
                     .name("장난감" + i)
                     .image("https://placeimg.com/100/100/any")
+                    .stock(i)
                     .build());
         }
     }
