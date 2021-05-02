@@ -11,4 +11,9 @@ public class FeignProductServiceFallbackImpl implements FeignProductService{
     public List<Product> getProducts() {
         return Collections.singletonList(Product.Empty);
     }
+
+    @Override
+    public Product orderProduct(String productId) {
+        return Product.Empty;
+    }
 }

@@ -21,7 +21,7 @@ public class ProductService {
                 .orElseThrow(IllegalAccessError::new);
 
         product.order(1);
-        
+
         return product;
     }
 }

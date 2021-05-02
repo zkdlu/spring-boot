@@ -20,7 +20,7 @@ public class DisplayController {
     }
 
     @GetMapping("/order/{productId}")
-    public Product orderProduct(@PathVariable String productId) {
-        return null;
+    public String orderProduct(@PathVariable String productId) {
+        return displayService.orderProduct(productId);
     }
 }
