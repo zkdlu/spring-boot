@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -18,5 +19,10 @@ public class ProductService {
 
     public List<Product> getProductsByPage(int page) {
         return productRepository.findAll(page);
+    }
+
+    public Product getProduct(String productId) {
+        return productRepository.findById(UUID.fromString(productId))
+                .orElseThrow(IllegalStateException::new);
     }
 }

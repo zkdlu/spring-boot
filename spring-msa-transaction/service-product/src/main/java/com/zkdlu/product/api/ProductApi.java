@@ -21,7 +21,12 @@ public class ProductApi {
         return productService.getProducts();
     }
 
-    @GetMapping("/products/{page}")
+    @GetMapping("/products/{productId}")
+    public Product getProduct(@PathVariable String productId) {
+        return productService.getProduct(productId);
+    }
+
+    @GetMapping("/products/page/{page}")
     public List<Product> getProducts(@PathVariable int page) {
         return productService.getProductsByPage(page);
     }
