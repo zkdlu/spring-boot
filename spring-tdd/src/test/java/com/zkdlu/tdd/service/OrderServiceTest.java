@@ -155,4 +155,10 @@ class OrderServiceTest {
         //then
         assertThat(order.getState()).isEqualTo(Order.OrderState.취소);
     }
+
+    @Test
+    @DisplayName("실패하는 테스트 케이스")
+    void failTest() {
+        assertThat(true).isEqualTo(false);
+    }
 }
