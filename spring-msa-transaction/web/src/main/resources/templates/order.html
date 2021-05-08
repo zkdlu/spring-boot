@@ -20,12 +20,14 @@
 <body>
 <div class="container" id="app" v-cloak>
     <h1>주문하기</h1>
-    <span th:text="${productId}"></span>
+    제품 id: <span th:text="${productId}"></span>
+    남은 수량: <span th:text="${stock}"></span>
 </div>
 <script>
     var vm = new Vue({
         el: '#app',
         data: {
+            stock: 0
         },
         created() {
         },
