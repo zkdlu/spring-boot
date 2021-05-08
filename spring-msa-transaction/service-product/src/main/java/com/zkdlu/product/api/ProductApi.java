@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin("*")
 @RequiredArgsConstructor
@@ -22,7 +23,12 @@ public class ProductApi {
     }
 
     @GetMapping("/products/{page}")
-    public List<Product> getProducts(@PathVariable int page) {
+    public List<Product> getProductPage(@PathVariable int page) {
         return productService.getProductsByPage(page);
+    }
+
+    @GetMapping("/products/detail/{uuid}")
+    public Product getProduct(@PathVariable UUID uuid) {
+        return productService.getProductDetail(uuid);
     }
 }
