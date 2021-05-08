@@ -79,6 +79,7 @@
         },
         methods: {
             enterOrder: function(productId) {
+                localStorage.setItem('product.id', productId);
                 location.href="/order/" + productId;
             },
             getItems: async function() {

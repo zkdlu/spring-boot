@@ -20,22 +20,38 @@
 <body>
 <div class="container" id="app" v-cloak>
     <h1>주문하기</h1>
-    제품 id: <span th:text="${productId}"></span>
-    남은 수량: <span th:text="${stock}"></span>
+    <div>
+        제품 id: <span>{{product.id}}</span>
+    </div>
+    <div>
+        이름: <span>{{product.name}}</span>
+    </div>
+    <div>
+        남은 수량: <span>{{product.stock}}</span>
+    </div>
+    <div>
+        <img v-bind:src="product.image" v-bind:id="product.id" style="margin:4px;">
+    </div>
 </div>
 <script>
     var vm = new Vue({
         el: '#app',
         data: {
-            stock: 0
+            product: {
+
+            }
         },
         created() {
-        },
-        mounted() {
-        },
-        computed: {
+            const id = localStorage.getItem('product.id');
+            this.getItem(id);
         },
         methods: {
+            getItem: async function(uuid) {
+                await axios.get('http://localhost:8081/products/detail/' + uuid).then(response => {
+                    console.log(response.data);
+                    this.product = response.data;
+                });
+            }
         }
     });
 </script>
