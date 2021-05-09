@@ -38,7 +38,7 @@ project(':web') {
     }
 }
 
-project(':service-display') {
+project(':service-payment') {
     dependencies {
 
     }
