@@ -14,6 +14,12 @@
         [v-cloak] {
             display: none;
         }
+
+         .btn {
+             background: white;
+             border: none;
+             cursor: pointer;
+         }
     </style>
     <title>주문하기</title>
 </head>
@@ -29,8 +35,13 @@
     <div>
         남은 수량: <span>{{product.stock}}</span>
     </div>
+    <div class="container">
+        <button class="btn">
+            <img alt="Snow" th:src="@{/images/payment_icon_yellow_large.png}">
+        </button>
+    </div>
     <div>
-        <img v-bind:src="product.image" v-bind:id="product.id" style="margin:4px;">
+        <img width="400px;" v-bind:src="product.image" v-bind:id="product.id" style="margin:4px;">
     </div>
 </div>
 <script>
