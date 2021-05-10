@@ -80,14 +80,13 @@
             requestPay: function() {
                 const item = this.product;
 
-                axios.post('http://localhost:8082/pay/', {
-                    headers: {
-                        'Access-Control-Allow-Origin': '*'
-                    }
-                }).then(response => {
-                    console.log(response);
-                }).catch(e => {
-                    console.log(e);
+                fetch('http://localhost:8082/pay/', { method: 'POST' })
+                    .then(response => {
+                        if (response.redirected) {
+                            window.location.href = response.url;
+                        }
+                }).catch(function(err) {
+                    console.log(err + " url: " + url);
                 });
             }
         }
