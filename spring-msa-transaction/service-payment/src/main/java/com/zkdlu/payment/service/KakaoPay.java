@@ -2,7 +2,7 @@ package com.zkdlu.payment.service;
 
 import com.zkdlu.payment.domain.Payment;
 import com.zkdlu.payment.domain.PaymentRepository;
-import com.zkdlu.payment.service.remote.KakaoPayReady;
+import com.zkdlu.payment.service.remote.PayReady;
 import com.zkdlu.payment.service.remote.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,22 +28,21 @@ public class KakaoPay implements PayService{
     private final RestTemplate restTemplate;
 
     @Override
-    public String prepare(String productId) {
+    public PayReady prepare(String productId) {
         Product product = getProductInfo(productId);
 
         Payment payment = Payment.builder()
                 .id(UUID.randomUUID().toString())
                 .product(product)
                 .build();
+
         paymentRepository.save(payment);
 
         HttpHeaders headers = kakaoPayHeader();
         MultiValueMap<String, String> params = kakaoPayParams(payment);
 
-        var body = new HttpEntity<MultiValueMap<String, String>>(params, headers);
-        var kakaoPayReady = restTemplate.postForObject(HOST + "/v1/payment/ready", body, KakaoPayReady.class);
-
-        return kakaoPayReady.getNextRedirectPcUrl();
+        return restTemplate.postForObject(HOST + "/v1/payment/ready",
+                new HttpEntity<MultiValueMap<String, String>>(params, headers), PayReady.class);
     }
 
     private Product getProductInfo(String productId) {
@@ -61,9 +60,9 @@ public class KakaoPay implements PayService{
         params.add("quantity", "1");
         params.add("total_amount", payment.getProduct().getPrice() + "");
         params.add("tax_free_amount", "1");
-        params.add("approval_url", "http://localhost:8080/kakaoPaySuccess");
-        params.add("cancel_url", "http://localhost:8080/kakaoPayCancel");
-        params.add("fail_url", "http://localhost:8080/kakaoPaySuccessFail");
+        params.add("approval_url", "http://localhost:8082/kakaoPaySuccess");
+        params.add("cancel_url", "http://localhost:8082/kakaoPayCancel");
+        params.add("fail_url", "http://localhost:8082/kakaoPaySuccessFail");
 
         return params;
     }

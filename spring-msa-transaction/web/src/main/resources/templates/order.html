@@ -73,7 +73,6 @@
 
                 setTimeout(async e => {
                     await axios.get('http://localhost:8081/products/detail/' + uuid).then(response => {
-                        console.log(response.data);
                         this.product = response.data;
 
                         this.loading = false;
@@ -83,21 +82,20 @@
             requestPay: function() {
                 const item = this.product;
 
-                fetch('http://localhost:8082/pay/', {
-                    method: 'POST',
-                    headers: {
-                        'Access-Control-Allow-Origin':'*',
-                        'Accept' : 'application/json',
-                        'Content-Type': 'application/json;charset=utf-8'
-                    },
-                    body: JSON.stringify({ product_id: item.id })
-                }).then(response => {
-                    console.log(response);
-                    if (response.redirected) {
-                        window.location.href = response.url;
-                    }
-                }).catch(function(err) {
-                    console.log(err + " url: " + url);
+                const bodyData = {
+                    product_id: item.id
+                };
+
+                const header = {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    "Access-Control-Allow-Origin": "*"
+                };
+
+                axios.post('http://localhost:8082/pay', bodyData, {
+                    headers: header
+                }).then(res => {
+                    localStorage.setItem('payReady', res.data);
+                    window.location = res.data.next_redirect_pc_url;
                 });
             }
         }

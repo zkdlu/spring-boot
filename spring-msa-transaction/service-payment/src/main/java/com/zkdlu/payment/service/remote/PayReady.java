@@ -8,7 +8,7 @@ import java.util.Date;
 
 @NoArgsConstructor
 @Getter
-public class KakaoPayReady {
+public class PayReady {
     @JsonProperty("tid")
     private String tid;
     @JsonProperty("next_redirect_pc_url")
