@@ -27,7 +27,7 @@ public class KakaoPay implements PayService{
     @Override
     public Payment prepare(String productId, int price) {
         HttpHeaders headers = kakaoPayHeader();
-        MultiValueMap<String, String> params = kakaoPayParams();
+        MultiValueMap<String, String> params = kakaoPayParams(productId, price);
 
         Payment payment = Payment.builder()
                 .id(UUID.randomUUID().toString())
@@ -42,6 +42,7 @@ public class KakaoPay implements PayService{
 
     private MultiValueMap<String, String> kakaoPayParams(String productId, int price) {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+        // 테스트 결제용 가맹점 코드
         params.add("cid", "TC0ONETIME");
         params.add("partner_order_id", "1001");
         params.add("partner_user_id", "gorany");

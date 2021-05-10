@@ -26,30 +26,36 @@
 <body>
 <div class="container" id="app" v-cloak>
     <h1>주문하기</h1>
-    <div>
-        제품 id: <span>{{product.id}}</span>
-    </div>
-    <div>
-        이름: <span>{{product.name}}</span>
-    </div>
-    <div>
-        남은 수량: <span>{{product.stock}}</span>
-    </div>
-    <form method="post" action="/pay">
-    <div class="container">
-        <button class="btn">
-            <img width="100px;" th:src="@{/images/payment_icon_yellow_large.png}">
-        </button>
-    </div>
-    </form>
-    <div>
-        <img width="400px;" v-bind:src="product.image" v-bind:id="product.id" style="margin:4px;">
-    </div>
+    <template v-if="loading">
+        <h1>상품정보를 불러오는 중입니다.</h1>
+    </template>
+    <template v-else>
+        <div>
+            제품 id: <span>{{product.id}}</span>
+        </div>
+        <div>
+            이름: <span>{{product.name}}</span>
+        </div>
+        <div>
+            남은 수량: <span>{{product.stock}}</span>
+        </div>
+
+        <div class="container">
+            <button class="btn" v-on:click="requestPay">
+                <img width="100px;" th:src="@{/images/payment_icon_yellow_large.png}">
+            </button>
+        </div>
+
+        <div>
+            <img width="400px;" v-bind:src="product.image" v-bind:id="product.id" style="margin:4px;">
+        </div>
+    </template>
 </div>
 <script>
     var vm = new Vue({
         el: '#app',
         data: {
+            loading: false,
             product: {
 
             }
@@ -59,10 +65,29 @@
             this.getItem(id);
         },
         methods: {
-            getItem: async function(uuid) {
-                await axios.get('http://localhost:8081/products/detail/' + uuid).then(response => {
-                    console.log(response.data);
-                    this.product = response.data;
+            getItem: function(uuid) {
+                this.loading = true;
+
+                setTimeout(async e => {
+                    await axios.get('http://localhost:8081/products/detail/' + uuid).then(response => {
+                        console.log(response.data);
+                        this.product = response.data;
+
+                        this.loading = false;
+                    });
+                }, 1000);
+            },
+            requestPay: function() {
+                const item = this.product;
+
+                axios.post('http://localhost:8082/pay/', {
+                    headers: {
+                        'Access-Control-Allow-Origin': '*'
+                    }
+                }).then(response => {
+                    console.log(response);
+                }).catch(e => {
+                    console.log(e);
                 });
             }
         }
