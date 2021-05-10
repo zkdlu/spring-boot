@@ -10,8 +10,6 @@ class PaymentTest {
     void paymentTest() {
         Payment payment = Payment.builder()
                 .id("pay-1")
-                .price(1000)
-                .productId("product-1")
                 .build();
 
         assertThat(payment.getState()).isEqualTo(Payment.State.PREPARE);
@@ -21,8 +19,6 @@ class PaymentTest {
     void payedTest() {
         Payment payment = Payment.builder()
                 .id("pay-1")
-                .price(1000)
-                .productId("product-1")
                 .build();
 
         payment.pay();
@@ -34,8 +30,6 @@ class PaymentTest {
     void completeTest() {
         Payment payment = Payment.builder()
                 .id("pay-1")
-                .price(1000)
-                .productId("product-1")
                 .build();
 
         payment.complete();

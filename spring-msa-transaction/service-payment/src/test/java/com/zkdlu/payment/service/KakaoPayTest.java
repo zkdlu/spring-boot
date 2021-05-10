@@ -25,22 +25,13 @@ class KakaoPayTest {
     void prepare() {
         //given
         //when
-        var result = kakaoPay.prepare("product-1");
-
         //then
-        assertThat(result.getState()).isEqualTo(Payment.State.PREPARE);
     }
 
     @Test
     void pay() {
         //given
-        var payment = kakaoPay.prepare("product-1");
-        given(paymentRepository.findById(payment.getId())).willReturn(Optional.of(payment));
-
         //when
-        kakaoPay.pay(payment.getId());
-
-        //then
-        assertThat(payment.getState()).isEqualTo(Payment.State.PAYED);
+        // then
     }
 }

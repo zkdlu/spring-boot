@@ -17,11 +17,13 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .id(UUID.randomUUID())
                     .name("옷" + i)
                     .image("https://placeimg.com/100/100/any")
+                    .price(1000 + i * 1000)
                     .stock(i)
                     .build());
             products.add(Product.builder()
                     .id(UUID.randomUUID())
                     .name("신발" + i)
+                    .price(1000 + i * 1000)
                     .stock(i)
                     .image("https://placeimg.com/100/100/any")
                     .build());
@@ -29,6 +31,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                     .id(UUID.randomUUID())
                     .name("장난감" + i)
                     .image("https://placeimg.com/100/100/any")
+                    .price(1000 + i * 1000)
                     .stock(i)
                     .build());
         }
