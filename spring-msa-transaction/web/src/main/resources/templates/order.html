@@ -80,11 +80,16 @@
             requestPay: function() {
                 const item = this.product;
 
-                fetch('http://localhost:8082/pay/', { method: 'POST' })
-                    .then(response => {
-                        if (response.redirected) {
-                            window.location.href = response.url;
-                        }
+                fetch('http://localhost:8082/pay/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify({ product_id: item.id })
+                }).then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
                 }).catch(function(err) {
                     console.log(err + " url: " + url);
                 });

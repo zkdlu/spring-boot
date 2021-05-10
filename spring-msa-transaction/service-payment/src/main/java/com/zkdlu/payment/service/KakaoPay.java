@@ -25,14 +25,14 @@ public class KakaoPay implements PayService{
     private final RestTemplate restTemplate;
 
     @Override
-    public Payment prepare(String productId, int price) {
+    public Payment prepare(String productId) {
         HttpHeaders headers = kakaoPayHeader();
-        MultiValueMap<String, String> params = kakaoPayParams(productId, price);
+        MultiValueMap<String, String> params = kakaoPayParams(productId, 1000);
 
         Payment payment = Payment.builder()
                 .id(UUID.randomUUID().toString())
                 .productId(productId)
-                .price(price)
+                .price(1000)
                 .build();
 
         paymentRepository.save(payment);
