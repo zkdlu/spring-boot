@@ -94,7 +94,6 @@
                 axios.post('http://localhost:8082/pay', bodyData, {
                     headers: header
                 }).then(res => {
-                    localStorage.setItem('payReady', res.data);
                     window.location = res.data.next_redirect_pc_url;
                 });
             }

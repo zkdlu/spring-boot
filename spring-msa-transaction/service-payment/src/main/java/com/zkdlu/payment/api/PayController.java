@@ -23,13 +23,5 @@ public class PayController {
         log.info(payReady.getTid());
 
         return payReady;
-
-//        log.info(payRequest.getProductId());
-//        return "https://mockup-pg-web.kakao.com/v1/bc290e7ef5a07787cdd2503a4ba71e8b09220c0eb448f114e3d192771ae8e985/info";// + payReadyUrl;
-    }
-
-    @GetMapping("/kakaoPaySuccess")
-    public void kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
-        log.info("kakaoPaySuccess pg_token : " + pg_token);
     }
 }

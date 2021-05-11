@@ -55,14 +55,14 @@ public class KakaoPay implements PayService{
         // 테스트 결제용 가맹점 코드
         params.add("cid", "TC0ONETIME");
         params.add("partner_order_id", payment.getId());
-        params.add("partner_user_id", "gorany");
+        params.add("partner_user_id", "zkdlu");
         params.add("item_name", payment.getProduct().getName());
         params.add("quantity", "1");
         params.add("total_amount", payment.getProduct().getPrice() + "");
         params.add("tax_free_amount", "1");
-        params.add("approval_url", "http://localhost:8082/kakaoPaySuccess");
-        params.add("cancel_url", "http://localhost:8082/kakaoPayCancel");
-        params.add("fail_url", "http://localhost:8082/kakaoPaySuccessFail");
+        params.add("approval_url", "http://localhost:8082/pay/success");
+        params.add("cancel_url", "http://localhost:8082/pay/cancel");
+        params.add("fail_url", "http://localhost:8082/pay/fail");
 
         return params;
     }
