@@ -9,5 +9,5 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class Cart {
-    private List<String> products = new ArrayList<>();
+    private List<CartItem> products = new ArrayList<>();
 }

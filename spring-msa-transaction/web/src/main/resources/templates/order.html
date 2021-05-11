@@ -83,8 +83,15 @@
                 const item = this.product;
 
                 const bodyData = {
-                    products: [item.id]
+                    products: [
+                    {
+                        id: item.id,
+                        name: item.name,
+                        price: item.price
+                    }]
                 };
+
+                console.log(bodyData);
 
                 const header = {
                     'Content-Type': 'application/json;charset=UTF-8',
