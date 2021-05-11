@@ -30,7 +30,6 @@ public class KakaoPay implements PayService{
     @Override
     public PayReady prepare(String productId) {
         Product product = getProductInfo(productId);
-
         Payment payment = Payment.builder()
                 .id(UUID.randomUUID().toString())
                 .product(product)
@@ -38,16 +37,33 @@ public class KakaoPay implements PayService{
 
         paymentRepository.save(payment);
 
+        var payReady = prepareKakaoPay(payment);
+
+        return payReady;
+    }
+
+    @Override
+    public void pay(String paymentId) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(IllegalStateException::new);
+
+        payment.pay();
+    }
+
+    @Override
+    public void complete(String paymentId) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(IllegalStateException::new);
+
+        payment.complete();
+    }
+
+    private PayReady prepareKakaoPay(Payment payment) {
         HttpHeaders headers = kakaoPayHeader();
         MultiValueMap<String, String> params = kakaoPayParams(payment);
 
         return restTemplate.postForObject(HOST + "/v1/payment/ready",
                 new HttpEntity<MultiValueMap<String, String>>(params, headers), PayReady.class);
-    }
-
-    private Product getProductInfo(String productId) {
-        return restTemplate.getForObject("http://localhost:8081/products/detail/" + productId,
-                Product.class);
     }
 
     private MultiValueMap<String, String> kakaoPayParams(Payment payment) {
@@ -76,19 +92,8 @@ public class KakaoPay implements PayService{
         return headers;
     }
 
-    @Override
-    public void pay(String paymentId) {
-        Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(IllegalStateException::new);
-
-        payment.pay();
-    }
-
-    @Override
-    public void complete(String paymentId) {
-        Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(IllegalStateException::new);
-
-        payment.complete();
+    private Product getProductInfo(String productId) {
+        return restTemplate.getForObject("http://localhost:8081/products/detail/" + productId,
+                Product.class);
     }
 }

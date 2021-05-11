@@ -49,3 +49,9 @@ project(':service-product') {
 
     }
 }
+
+project(':service-order') {
+    dependencies {
+
+    }
+}

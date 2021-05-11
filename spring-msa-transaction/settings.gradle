@@ -2,4 +2,5 @@ rootProject.name = 'transaction'
 include 'web'
 include 'service-product'
 include 'service-payment'
+include 'service-order'
 
