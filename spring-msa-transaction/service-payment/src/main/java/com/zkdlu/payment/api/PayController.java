@@ -23,9 +23,6 @@ public class PayController {
         log.info(payReady.getTid());
 
         return payReady;
-
-//        log.info(payRequest.getProductId());
-//        return "https://mockup-pg-web.kakao.com/v1/bc290e7ef5a07787cdd2503a4ba71e8b09220c0eb448f114e3d192771ae8e985/info";// + payReadyUrl;
     }
 
     @GetMapping("/kakaoPaySuccess")
