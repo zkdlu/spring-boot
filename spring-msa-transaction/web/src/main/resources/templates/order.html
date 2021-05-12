@@ -83,19 +83,26 @@
                 const item = this.product;
 
                 const bodyData = {
-                    product_id: item.id
+                    products: [
+                    {
+                        id: item.id,
+                        name: item.name,
+                        price: item.price
+                    }]
                 };
+
+                console.log(bodyData);
 
                 const header = {
                     'Content-Type': 'application/json;charset=UTF-8',
                     "Access-Control-Allow-Origin": "*"
                 };
 
-                axios.post('http://localhost:8082/pay', bodyData, {
+                axios.post('http://localhost:8083/order', bodyData, {
                     headers: header
                 }).then(res => {
-                    localStorage.setItem('payReady', res.data);
-                    window.location = res.data.next_redirect_pc_url;
+                    alert(res.data);
+                    //window.location = res.data.next_redirect_pc_url;
                 });
             }
         }

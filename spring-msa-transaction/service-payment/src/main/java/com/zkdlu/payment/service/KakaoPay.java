@@ -30,7 +30,6 @@ public class KakaoPay implements PayService{
     @Override
     public PayReady prepare(String productId) {
         Product product = getProductInfo(productId);
-
         Payment payment = Payment.builder()
                 .id(UUID.randomUUID().toString())
                 .product(product)
@@ -38,42 +37,9 @@ public class KakaoPay implements PayService{
 
         paymentRepository.save(payment);
 
-        HttpHeaders headers = kakaoPayHeader();
-        MultiValueMap<String, String> params = kakaoPayParams(payment);
+        var payReady = prepareKakaoPay(payment);
 
-        return restTemplate.postForObject(HOST + "/v1/payment/ready",
-                new HttpEntity<MultiValueMap<String, String>>(params, headers), PayReady.class);
-    }
-
-    private Product getProductInfo(String productId) {
-        return restTemplate.getForObject("http://localhost:8081/products/detail/" + productId,
-                Product.class);
-    }
-
-    private MultiValueMap<String, String> kakaoPayParams(Payment payment) {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-        // 테스트 결제용 가맹점 코드
-        params.add("cid", "TC0ONETIME");
-        params.add("partner_order_id", payment.getId());
-        params.add("partner_user_id", "gorany");
-        params.add("item_name", payment.getProduct().getName());
-        params.add("quantity", "1");
-        params.add("total_amount", payment.getProduct().getPrice() + "");
-        params.add("tax_free_amount", "1");
-        params.add("approval_url", "http://localhost:8082/kakaoPaySuccess");
-        params.add("cancel_url", "http://localhost:8082/kakaoPayCancel");
-        params.add("fail_url", "http://localhost:8082/kakaoPaySuccessFail");
-
-        return params;
-    }
-
-    private HttpHeaders kakaoPayHeader() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "KakaoAK " + kakaoPayAdminKey);
-        headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
-        headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
-
-        return headers;
+        return payReady;
     }
 
     @Override
@@ -90,5 +56,44 @@ public class KakaoPay implements PayService{
                 .orElseThrow(IllegalStateException::new);
 
         payment.complete();
+    }
+
+    private PayReady prepareKakaoPay(Payment payment) {
+        HttpHeaders headers = kakaoPayHeader();
+        MultiValueMap<String, String> params = kakaoPayParams(payment);
+
+        return restTemplate.postForObject(HOST + "/v1/payment/ready",
+                new HttpEntity<MultiValueMap<String, String>>(params, headers), PayReady.class);
+    }
+
+    private MultiValueMap<String, String> kakaoPayParams(Payment payment) {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+        // 테스트 결제용 가맹점 코드
+        params.add("cid", "TC0ONETIME");
+        params.add("partner_order_id", payment.getId());
+        params.add("partner_user_id", "zkdlu");
+        params.add("item_name", payment.getProduct().getName());
+        params.add("quantity", "1");
+        params.add("total_amount", payment.getProduct().getPrice() + "");
+        params.add("tax_free_amount", "1");
+        params.add("approval_url", "http://localhost:8082/pay/success");
+        params.add("cancel_url", "http://localhost:8082/pay/cancel");
+        params.add("fail_url", "http://localhost:8082/pay/fail");
+
+        return params;
+    }
+
+    private HttpHeaders kakaoPayHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "KakaoAK " + kakaoPayAdminKey);
+        headers.add("Accept", MediaType.APPLICATION_JSON_UTF8_VALUE);
+        headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
+
+        return headers;
+    }
+
+    private Product getProductInfo(String productId) {
+        return restTemplate.getForObject("http://localhost:8081/products/detail/" + productId,
+                Product.class);
     }
 }
