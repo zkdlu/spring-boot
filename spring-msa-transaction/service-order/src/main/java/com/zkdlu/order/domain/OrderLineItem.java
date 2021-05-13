@@ -7,4 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderLineItem {
     private String id;
+    private String name;
+    private int price;
 }

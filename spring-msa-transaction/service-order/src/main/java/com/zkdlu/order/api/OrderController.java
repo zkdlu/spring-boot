@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class OrderController {
-
     private final OrderService orderService;
 
     @PostMapping("/order")
     public String order(@RequestBody Cart cart) {
         log.info("hello");
+
+        //orderService.placeOrder()
         return "hello";
     }
 }
