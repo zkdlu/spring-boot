@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Getter
-public class PayRequest {
-    @JsonProperty("product_id")
-    private String productId;
+public class OrderDto {
+    private String id;
+    private List<OrderLineItemDto> orderItems;
 }

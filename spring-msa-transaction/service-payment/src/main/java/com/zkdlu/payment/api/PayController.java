@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -20,8 +19,8 @@ public class PayController {
 
     @PostMapping("/pay")
     @ResponseBody
-    public PayReady kakaoPay(@RequestBody PayRequest payRequest, HttpSession session) throws IOException {
-        var payReady  = payService.prepare(payRequest.getProductId());
+    public PayReady kakaoPay(@RequestBody OrderDto payRequest, HttpSession session) throws IOException {
+        var payReady  = payService.prepare("");
         log.info(payReady.getTid());
 
         session.setAttribute("pay.ready", payReady);

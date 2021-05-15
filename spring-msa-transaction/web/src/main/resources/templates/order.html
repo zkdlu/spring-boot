@@ -101,6 +101,7 @@
                 axios.post('http://localhost:8083/order', bodyData, {
                     headers: header
                 }).then(res => {
+                    console.log(res.data);
                     alert(res.data);
                     //window.location = res.data.next_redirect_pc_url;
                 });

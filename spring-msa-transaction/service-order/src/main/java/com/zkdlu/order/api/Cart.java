@@ -1,5 +1,6 @@
 package com.zkdlu.order.api;
 
+import com.zkdlu.order.domain.Order;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
