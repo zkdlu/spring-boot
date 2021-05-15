@@ -1,6 +1,6 @@
 package com.zkdlu.order.api;
 
-import com.zkdlu.order.service.OrderDto;
+import com.zkdlu.order.domain.PayRequest;
 import com.zkdlu.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +17,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/order")
-    public String order(@RequestBody Cart cart) {
-        OrderDto orderDto = OrderMapper.toOrder(cart);
-        orderService.placeOrder(orderDto);
-        return "hello";
+    public PayRequest order(@RequestBody Cart cart) {
+        return null;
     }
 }
