@@ -1,6 +1,7 @@
 package com.zkdlu.payment.api;
 
 import com.zkdlu.payment.service.PayService;
+import com.zkdlu.payment.service.remote.Order;
 import com.zkdlu.payment.service.remote.PayReady;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +20,8 @@ public class PayController {
 
     @PostMapping("/pay")
     @ResponseBody
-    public PayReady kakaoPay(@RequestBody OrderDto payRequest, HttpSession session) throws IOException {
-        var payReady  = payService.prepare("");
+    public PayReady kakaoPay(@RequestBody Order order, HttpSession session) throws IOException {
+        var payReady  = payService.prepare(order);
         log.info(payReady.getTid());
 
         session.setAttribute("pay.ready", payReady);

@@ -2,6 +2,8 @@ package com.zkdlu.payment.service;
 
 import com.zkdlu.payment.domain.Payment;
 import com.zkdlu.payment.domain.PaymentRepository;
+import com.zkdlu.payment.service.remote.Order;
+import com.zkdlu.payment.service.remote.OrderLineItem;
 import com.zkdlu.payment.service.remote.PayReady;
 import com.zkdlu.payment.service.remote.Product;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -28,11 +31,10 @@ public class KakaoPay implements PayService{
     private final RestTemplate restTemplate;
 
     @Override
-    public PayReady prepare(String productId) {
-        Product product = getProductInfo(productId);
+    public PayReady prepare(Order order) {
         Payment payment = Payment.builder()
                 .id(UUID.randomUUID().toString())
-                .product(product)
+                .order(order)
                 .build();
 
         paymentRepository.save(payment);
@@ -72,9 +74,9 @@ public class KakaoPay implements PayService{
         params.add("cid", "TC0ONETIME");
         params.add("partner_order_id", payment.getId());
         params.add("partner_user_id", "zkdlu");
-        params.add("item_name", payment.getProduct().getName());
+        params.add("item_name", payment.getOrder().getOrderItems().stream().map(OrderLineItem::getName).collect(Collectors.joining(",")));
         params.add("quantity", "1");
-        params.add("total_amount", payment.getProduct().getPrice() + "");
+        params.add("total_amount", payment.getOrder().getOrderItems().stream().map(OrderLineItem::getPrice).reduce(0, Integer::sum).toString());
         params.add("tax_free_amount", "1");
         params.add("approval_url", "http://localhost:8082/pay/success");
         params.add("cancel_url", "http://localhost:8082/pay/cancel");
@@ -90,10 +92,5 @@ public class KakaoPay implements PayService{
         headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
 
         return headers;
-    }
-
-    private Product getProductInfo(String productId) {
-        return restTemplate.getForObject("http://localhost:8081/products/detail/" + productId,
-                Product.class);
     }
 }

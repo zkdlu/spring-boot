@@ -1,5 +1,6 @@
 package com.zkdlu.payment.domain;
 
+import com.zkdlu.payment.service.remote.Order;
 import com.zkdlu.payment.service.remote.Product;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,13 +12,13 @@ public class Payment {
     }
 
     private String id;
-    private Product product;
+    private Order order;
     private State state;
 
     @Builder
-    public Payment(String id, Product product) {
+    public Payment(String id, Order order) {
         this.id = id;
-        this.product = product;
+        this.order = order;
         this.state = State.PREPARE;
     }
 
