@@ -7,10 +7,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 
 @Slf4j
@@ -27,20 +29,19 @@ public class PayController {
         log.info(payReady.getTid());
 
         var session = request.getSession(true);
-        session.setAttribute("pay.ready", payReady);
+        session.setAttribute(order.getId(), payReady);
 
         return payReady;
     }
 
     @GetMapping("/pay/success")
+    @ResponseBody
     public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token,
-                                  HttpServletRequest request) {
-        var session = request.getSession(false);
-        PayReady payReady = (PayReady) session.getAttribute("pay.ready");
+                                        @RequestParam String order) {
 
-        log.info(pg_token + " : " + payReady.getTid());
+        log.info(pg_token + " : " + order);
 
-        return "redirect:localhost:8080";
+        return pg_token + " : " + order;
     }
 
     @GetMapping("/pay/fail")

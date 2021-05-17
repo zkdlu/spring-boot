@@ -78,7 +78,7 @@ public class KakaoPay implements PayService{
         params.add("quantity", "1");
         params.add("total_amount", payment.getOrder().getOrderItems().stream().map(OrderLineItem::getPrice).reduce(0, Integer::sum).toString());
         params.add("tax_free_amount", "1");
-        params.add("approval_url", "http://localhost:8082/pay/success");
+        params.add("approval_url", "http://localhost:8082/pay/success?order=" + payment.getId());
         params.add("cancel_url", "http://localhost:8082/pay/cancel");
         params.add("fail_url", "http://localhost:8082/pay/fail");
 
