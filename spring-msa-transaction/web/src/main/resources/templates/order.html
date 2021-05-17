@@ -100,8 +100,7 @@
                     headers: header
                 }).then(res => {
                     console.log(res.data);
-                    alert(res.data);
-                    //window.location = res.data.next_redirect_pc_url;
+                    window.location = res.data.payReady.next_redirect_pc_url;
                 });
             }
         }
