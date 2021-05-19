@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.min.js"></script>
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+         .btn {
+             background: white;
+             border: none;
+             cursor: pointer;
+         }
+    </style>
+    <title>주문하기</title>
+</head>
+<body>
+<div class="container" id="app" v-cloak>
+    <h1>주문하기</h1>
+    <template v-if="loading">
+        <h1>상품정보를 불러오는 중입니다.</h1>
+    </template>
+    <template v-else>
+        <div>
+            제품 id: <span>{{product.id}}</span>
+        </div>
+        <div>
+            이름: <span>{{product.name}}</span>
+        </div>
+        <div>
+            <span>{{product.price}}원</span>
+        </div>
+        <div>
+            남은 수량: <span>{{product.stock}}</span>
+        </div>
+
+        <div class="container">
+            <button class="btn" v-on:click="requestPay">
+                <img width="100px;" th:src="@{/images/payment_icon_yellow_large.png}">
+            </button>
+        </div>
+
+        <div>
+            <img width="400px;" v-bind:src="product.image" v-bind:id="product.id" style="margin:4px;">
+        </div>
+    </template>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            loading: false,
+            product: {
+
+            }
+        },
+        created() {
+            const id = localStorage.getItem('product.id');
+            this.getItem(id);
+        },
+        methods: {
+            getItem: function(uuid) {
+                this.loading = true;
+
+                setTimeout(async e => {
+                    await axios.get('http://localhost:8081/products/detail/' + uuid).then(response => {
+                        this.product = response.data;
+
+                        this.loading = false;
+                    });
+                }, 1000);
+            },
+            requestPay: function() {
+                const item = this.product;
+
+                const bodyData = {
+                    items: [
+                    {
+                        id: item.id,
+                        name: item.name,
+                        price: item.price
+                    }]
+                };
+
+                const header = {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    "Access-Control-Allow-Origin": "*"
+                };
+
+                axios.post('http://localhost:8083/order', bodyData, {
+                    headers: header
+                }).then(res => {
+                    console.log(res.data);
+                    window.location = res.data.payReady.next_redirect_pc_url;
+                });
+            }
+        }
+    });
+</script>
+</body>
+</html>
