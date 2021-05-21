@@ -72,7 +72,7 @@
                 this.loading = true;
 
                 setTimeout(async e => {
-                    await axios.get('http://localhost:8081/products/detail/' + uuid).then(response => {
+                    await axios.get('/products/detail/' + uuid).then(response => {
                         this.product = response.data;
 
                         this.loading = false;
@@ -96,7 +96,7 @@
                     "Access-Control-Allow-Origin": "*"
                 };
 
-                axios.post('http://localhost:8083/order', bodyData, {
+                axios.post('/order', bodyData, {
                     headers: header
                 }).then(res => {
                     console.log(res.data);
