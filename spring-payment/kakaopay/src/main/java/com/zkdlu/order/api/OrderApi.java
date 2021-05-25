@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @RestController
 public class OrderApi {
@@ -14,11 +16,9 @@ public class OrderApi {
 
     @PostMapping("/order")
     public PayRequest order(@RequestBody Cart cart) {
-        return null;
-//        return orderService.placeOrder(cart.getItems()
-//                .stream()
-//                .map(CartItem::toOrderLineItem)
-//                .collect(Collectors.toList())
-//        );
+        return orderService.placeOrder(cart.getItems()
+                .stream()
+                .map(CartItem::toOrderItem)
+                .collect(Collectors.toList()));
     }
 }
