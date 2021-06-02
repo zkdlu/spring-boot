@@ -12,3 +12,6 @@ spring:
       ddl-auto: create
   thymeleaf:
     cache: false
+  h2:
+    console:
+      enabled: true
