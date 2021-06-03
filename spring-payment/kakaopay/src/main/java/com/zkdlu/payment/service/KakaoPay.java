@@ -36,7 +36,7 @@ public class KakaoPay {
     private final RestTemplate restTemplate;
     private final PaymentRepository paymentRepository;
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.MANDATORY)
     public PayReady prepare(Order order) {
         log.info("pay: {}", Thread.currentThread().getId());
 
@@ -45,7 +45,7 @@ public class KakaoPay {
                 .order(order)
                 .build();
 
-        //paymentRepository.save(payment);
+        paymentRepository.save(payment);
 
         return prepareKakaoPay(payment);
     }

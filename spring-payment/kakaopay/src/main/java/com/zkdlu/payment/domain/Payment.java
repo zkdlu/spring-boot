@@ -17,7 +17,6 @@ public class Payment {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     @Enumerated(value = EnumType.ORDINAL)
     private State state;

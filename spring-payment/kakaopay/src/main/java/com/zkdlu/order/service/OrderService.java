@@ -23,9 +23,8 @@ import java.util.UUID;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final KakaoPay kakaoPay;
-    //private final RestTemplate restTemplate;
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional
     public PayRequest placeOrder(List<OrderItem> orderItems) {
         log.info("order service: {}", Thread.currentThread().getId());
 
@@ -38,6 +37,7 @@ public class OrderService {
 
         PayReady payReady = kakaoPay.prepare(order);
                 //restTemplate.postForObject("http://localhost:8080/pay", order, PayReady.class);
+
 
         return PayRequest.builder()
                 .payReady(payReady)
