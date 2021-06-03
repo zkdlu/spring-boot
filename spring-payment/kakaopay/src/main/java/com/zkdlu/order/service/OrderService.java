@@ -1,6 +1,5 @@
 package com.zkdlu.order.service;
 
-import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.zkdlu.order.domain.Order;
 import com.zkdlu.order.domain.OrderItem;
 import com.zkdlu.order.domain.OrderRepository;
@@ -9,11 +8,8 @@ import com.zkdlu.payment.service.remote.PayReady;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,8 +32,6 @@ public class OrderService {
         orderRepository.save(order);
 
         PayReady payReady = kakaoPay.prepare(order);
-                //restTemplate.postForObject("http://localhost:8080/pay", order, PayReady.class);
-
 
         return PayRequest.builder()
                 .payReady(payReady)

@@ -18,7 +18,7 @@ public class Payment {
 
     @Id
     private String id;
-    @Enumerated(value = EnumType.ORDINAL)
+    @Enumerated(value = EnumType.STRING)
     private State state;
     @OneToOne
     @JoinColumn(name = "ORDER_ID")

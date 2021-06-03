@@ -16,18 +16,13 @@ import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
-@Controller
+@RequestMapping("/pay")
+@RestController
 public class PaymentApi {
     private final KakaoPay kakaopay;
 
-    @GetMapping("/")
-    public String index() {
-        return "index.html";
-    }
-
-    @PostMapping("/pay")
-    @ResponseBody
-    public PayReady kakaoPay(@RequestBody Order order, HttpServletRequest request) throws IOException {
+    @PostMapping
+    public PayReady pay(@RequestBody Order order, HttpServletRequest request) throws IOException {
         var payReady  = kakaopay.prepare(order);
         log.info(payReady.getTid());
 
@@ -38,12 +33,25 @@ public class PaymentApi {
     }
 
 
-    @GetMapping("/kakaoPaySuccess")
-    @ResponseBody
-    public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model) {
-        log.info("kakaoPaySuccess get............................................");
-        log.info("kakaoPaySuccess pg_token : " + pg_token);
+    @GetMapping("/success")
+    public String paySuccess(@RequestParam("pg_token") String pg_token) {
+        log.info("paySuccess get............................................");
+        log.info("paySuccess pg_token : " + pg_token);
 
-        return "index.html";
+        return pg_token;
+    }
+
+    @GetMapping("/cancel")
+    public String payCancel() {
+        log.info("payCancel get............................................");
+
+        return "cancel";
+    }
+
+    @GetMapping("/fail")
+    public String payFail() {
+        log.info("payFail get............................................");
+
+        return "fail";
     }
 }
