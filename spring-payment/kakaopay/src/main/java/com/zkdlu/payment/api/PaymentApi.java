@@ -34,7 +34,7 @@ public class PaymentApi {
 
 
     @GetMapping("/success")
-    public String paySuccess(@RequestParam("pg_token") String pg_token) {
+    public String paySuccess(@RequestParam("pg_token") String pg_token, @RequestParam("order") String orderId) {
         log.info("paySuccess get............................................");
         log.info("paySuccess pg_token : " + pg_token);
 
