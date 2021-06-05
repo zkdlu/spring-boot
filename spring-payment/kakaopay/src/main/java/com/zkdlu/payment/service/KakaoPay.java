@@ -36,12 +36,32 @@ public class KakaoPay {
     private final RestTemplate restTemplate;
     private final PaymentRepository paymentRepository;
 
-    @Transactional(propagation = Propagation.MANDATORY)
+    @Transactional
+    public String approve(String pg_token, String orderId, PayReady payReady) {
+        return approveKakaoPay(pg_token, orderId, payReady.getTid());
+    }
+
+    private String approveKakaoPay(String pgToken, String orderId, String tid) {
+        HttpHeaders headers = kakaoPayHeader();
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+
+        params.add("cid", "TC0ONETIME");
+        params.add("tid", tid);
+        params.add("partner_order_id", orderId);
+        params.add("partner_user_id", "zkdlu");
+        params.add("pg_token", pgToken);
+
+        return restTemplate.postForObject(HOST + "/v1/payment/approve",
+                new HttpEntity<MultiValueMap<String, String>>(params, headers), String.class);
+    }
+
+    @Transactional
     public PayReady prepare(Order order) {
         log.info("pay: {}", Thread.currentThread().getId());
 
         Payment payment = Payment.builder()
-                .id(UUID.randomUUID().toString())
+                .id(order.getId())
                 .order(order)
                 .build();
 
@@ -62,7 +82,7 @@ public class KakaoPay {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         // 테스트 결제용 가맹점 코드
         params.add("cid", "TC0ONETIME");
-        params.add("partner_order_id", payment.getId());
+        params.add("partner_order_id", payment.getOrder().getId());
         params.add("partner_user_id", "zkdlu");
         params.add("item_name", payment.getOrder().getOrderItems().stream().map(OrderItem::getName).collect(Collectors.joining(",")));
         params.add("quantity", "1");

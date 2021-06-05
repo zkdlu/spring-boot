@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Slf4j
@@ -34,11 +35,14 @@ public class PaymentApi {
 
 
     @GetMapping("/success")
-    public String paySuccess(@RequestParam("pg_token") String pg_token, @RequestParam("order") String orderId) {
-        log.info("paySuccess get............................................");
+    public String paySuccess(@RequestParam("pg_token") String pg_token,
+                             @RequestParam("order") String orderId,
+                             HttpSession session) {
         log.info("paySuccess pg_token : " + pg_token);
 
-        return pg_token;
+        var payReady = (PayReady)session.getAttribute("payReady");
+
+        return kakaopay.approve(pg_token, orderId, payReady);
     }
 
     @GetMapping("/cancel")
