@@ -38,7 +38,12 @@ public class KakaoPay {
 
     @Transactional
     public String approve(String pg_token, String orderId, PayReady payReady) {
-        return approveKakaoPay(pg_token, orderId, payReady.getTid());
+        var approve = approveKakaoPay(pg_token, orderId, payReady.getTid());
+
+        Payment payment = paymentRepository.findById(orderId).orElseThrow(IllegalStateException::new);
+        payment.payed();
+
+        return approve;
     }
 
     private String approveKakaoPay(String pgToken, String orderId, String tid) {

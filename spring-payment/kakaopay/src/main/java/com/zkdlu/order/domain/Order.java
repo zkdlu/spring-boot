@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "ORDERS")
 public class Order {
+
     public enum State {
         PREPARE, PAYED, COMPLETE
     }
@@ -29,5 +30,9 @@ public class Order {
         this.id = id;
         this.orderItems = orderItems;
         this.state = State.PREPARE;
+    }
+
+    public void payed() {
+        this.state = State.PAYED;
     }
 }

@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "PAYMENTS")
 public class Payment {
+
     public enum State {
         PREPARE, PAYED, COMPLETE
     }
@@ -29,5 +30,11 @@ public class Payment {
         this.id = id;
         this.order = order;
         this.state = State.PREPARE;
+    }
+
+    public void payed() {
+        this.state = State.PAYED;
+
+        order.payed();
     }
 }
