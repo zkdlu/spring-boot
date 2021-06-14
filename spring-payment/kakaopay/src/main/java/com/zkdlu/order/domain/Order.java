@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "ORDERS")
 public class Order {
-
     public enum State {
         PREPARE, PAYED, COMPLETE
     }
@@ -34,5 +33,11 @@ public class Order {
 
     public void payed() {
         this.state = State.PAYED;
+    }
+
+    public void verify() {
+        for (OrderItem orderItem : orderItems) {
+            orderItem.verify();
+        }
     }
 }

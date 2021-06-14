@@ -99,6 +99,9 @@
                 axios.post('/order', bodyData, {
                     headers: header
                 }).then(res => {
+                    if (res.data === '재고없음') {
+                        alert(res.data);
+                    }
                     console.log(res.data);
                     window.location = res.data.payReady.next_redirect_pc_url;
                 });
