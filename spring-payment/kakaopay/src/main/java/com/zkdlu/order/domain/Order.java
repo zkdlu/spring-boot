@@ -29,13 +29,15 @@ public class Order {
         this.id = id;
         this.orderItems = orderItems;
         this.state = State.PREPARE;
+
+        verify();
     }
 
     public void payed() {
         this.state = State.PAYED;
     }
 
-    public void verify() {
+    private void verify() {
         for (OrderItem orderItem : orderItems) {
             orderItem.verify();
         }
