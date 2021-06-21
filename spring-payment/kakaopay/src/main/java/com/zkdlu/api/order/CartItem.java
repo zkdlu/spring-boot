@@ -1,17 +1,17 @@
-package com.zkdlu.order.api;
+package com.zkdlu.api.order;
 
-import com.zkdlu.order.domain.OrderItem;
+import com.zkdlu.domain.order.OrderItem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CartItem {
-    private String id;
+class CartItem {
+    private Long id;
     private String name;
     private int price;
 
-    public OrderItem toOrderItem() {
+    OrderItem toOrderItem() {
         return new OrderItem(id, name, price);
     }
 }

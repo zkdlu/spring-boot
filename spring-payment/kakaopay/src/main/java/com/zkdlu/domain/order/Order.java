@@ -1,4 +1,4 @@
-package com.zkdlu.order.domain;
+package com.zkdlu.domain.order;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +17,8 @@ public class Order {
     }
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "ORDER_ID")
     private List<OrderItem> orderItems;
@@ -25,12 +26,9 @@ public class Order {
     private State state;
 
     @Builder
-    public Order(String id, List<OrderItem> orderItems) {
-        this.id = id;
+    public Order(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
         this.state = State.PREPARE;
-
-        verify();
     }
 
     public void payed() {
@@ -43,3 +41,4 @@ public class Order {
         }
     }
 }
+

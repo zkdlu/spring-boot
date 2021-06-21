@@ -1,6 +1,6 @@
 package com.zkdlu.payment.domain;
 
-import com.zkdlu.order.domain.Order;
+import com.zkdlu.domain.order.Order;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ public class Payment {
     }
 
     @Id
-    private String id;
+    private Long id;
     @Enumerated(value = EnumType.STRING)
     private State state;
     @OneToOne
@@ -26,7 +26,7 @@ public class Payment {
     private Order order;
 
     @Builder
-    public Payment(String id, Order order) {
+    public Payment(Long id, Order order) {
         this.id = id;
         this.order = order;
         this.state = State.PREPARE;

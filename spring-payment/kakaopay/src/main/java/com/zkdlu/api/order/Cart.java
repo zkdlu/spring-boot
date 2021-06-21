@@ -1,4 +1,4 @@
-package com.zkdlu.order.api;
+package com.zkdlu.api.order;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +8,6 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class Cart {
+class Cart {
     private List<CartItem> items = new ArrayList<>();
 }

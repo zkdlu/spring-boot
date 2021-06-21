@@ -84,7 +84,7 @@
                 location.href="/order/" + productId;
             },
             getItems: async function() {
-                await axios.get('http://localhost:8080/products/page/' + this.page).then(response => {
+                await axios.get('/products/page/' + this.page).then(response => {
                     this.items = this.items.concat(response.data);
                 });
             },

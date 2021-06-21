@@ -1,8 +1,8 @@
 package com.zkdlu.order.service;
 
-import com.zkdlu.order.domain.Order;
-import com.zkdlu.order.domain.OrderItem;
-import com.zkdlu.order.domain.OrderRepository;
+import com.zkdlu.domain.order.Order;
+import com.zkdlu.domain.order.OrderItem;
+import com.zkdlu.domain.order.OrderRepository;
 import com.zkdlu.order.events.OrderEvent;
 import com.zkdlu.payment.service.KakaoPay;
 import com.zkdlu.payment.service.remote.PayReady;
@@ -33,7 +33,6 @@ public class OrderService {
         checkCanBuyProduct(orderItems);
 
         Order order = Order.builder()
-                .id(UUID.randomUUID().toString())
                 .orderItems(orderItems)
                 .build();
         orderRepository.save(order);
@@ -50,7 +49,7 @@ public class OrderService {
 
     private void checkCanBuyProduct(List<OrderItem> orderItems) {
         for (OrderItem orderItem : orderItems) {
-            Product product = productService.getProductDetail(orderItem.getId());
+            Product product = productService.getProductDetail(orderItem.getId().toString());
             orderItem.canBuy(product.getStock());
         }
     }

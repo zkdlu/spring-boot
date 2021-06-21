@@ -1,14 +1,10 @@
 package com.zkdlu.payment.api;
 
-import com.zkdlu.order.domain.Order;
+import com.zkdlu.domain.order.Order;
 import com.zkdlu.payment.service.KakaoPay;
 import com.zkdlu.payment.service.remote.PayReady;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +24,7 @@ public class PaymentApi {
         log.info(payReady.getTid());
 
         var session = request.getSession(true);
-        session.setAttribute(order.getId(), payReady);
+        session.setAttribute(order.getId().toString(), payReady);
 
         return payReady;
     }

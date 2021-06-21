@@ -1,21 +1,25 @@
-package com.zkdlu.order.domain;
+package com.zkdlu.domain.order;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Getter
 @NoArgsConstructor
 @Entity
 public class OrderItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
     private String name;
     private int price;
 
     @Builder
-    public OrderItem(String id, String name, int price) {
+    public OrderItem(Long id, String name, int price) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -33,3 +37,4 @@ public class OrderItem {
         }
     }
 }
+

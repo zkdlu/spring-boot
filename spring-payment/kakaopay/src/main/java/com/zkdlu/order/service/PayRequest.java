@@ -1,6 +1,6 @@
 package com.zkdlu.order.service;
 
-import com.zkdlu.order.domain.Order;
+import com.zkdlu.domain.order.Order;
 import com.zkdlu.payment.service.remote.PayReady;
 import lombok.Builder;
 import lombok.Getter;

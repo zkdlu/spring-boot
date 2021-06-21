@@ -1,7 +1,7 @@
 package com.zkdlu.payment.service;
 
-import com.zkdlu.order.domain.Order;
-import com.zkdlu.order.domain.OrderItem;
+import com.zkdlu.domain.order.Order;
+import com.zkdlu.domain.order.OrderItem;
 import com.zkdlu.payment.domain.Payment;
 import com.zkdlu.payment.domain.PaymentRepository;
 import com.zkdlu.payment.service.remote.PayReady;
@@ -12,16 +12,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -87,7 +82,7 @@ public class KakaoPay {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         // 테스트 결제용 가맹점 코드
         params.add("cid", "TC0ONETIME");
-        params.add("partner_order_id", payment.getOrder().getId());
+        params.add("partner_order_id", payment.getOrder().getId().toString());
         params.add("partner_user_id", "zkdlu");
         params.add("item_name", payment.getOrder().getOrderItems().stream().map(OrderItem::getName).collect(Collectors.joining(",")));
         params.add("quantity", "1");
