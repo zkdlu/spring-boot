@@ -1,8 +1,8 @@
 package com.zkdlu.api.order;
 
 import com.zkdlu.domain.order.OrderItem;
-import com.zkdlu.order.service.OrderService;
-import com.zkdlu.order.service.PayRequest;
+import com.zkdlu.domain.order.OrderService;
+import com.zkdlu.domain.order.PayRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +25,6 @@ public class OrderApi {
                 .collect(Collectors.toList());
 
         PayRequest payRequest = orderService.placeOrder(orderItems);
-
 
         session.setAttribute("payReady", payRequest.getPayReady());
 

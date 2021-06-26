@@ -1,6 +1,6 @@
 package com.zkdlu.events;
 
-import com.zkdlu.order.events.OrderEvent;
+import com.zkdlu.domain.order.OrderEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
