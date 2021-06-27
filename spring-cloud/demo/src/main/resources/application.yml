@@ -1,2 +1,60 @@
 server:
   port: 8081
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      # actuator를 통해 circuitbraker 상태를 확인하기 위해 설정
+      minimumNumberOfCalls: 5
+      # Circuit Breaker가 에러 비율 또 slow call 비율을 계산하기 전에 요구되는 최소한의 요청 수
+      failureRateThreshold: 50
+      # 에러 비율 (퍼센트)로 해당 값 이상으로 에러 발생시 서킷이 Open 된다.
+      waitDurationInOpenState: 10s
+      # 서킷의 상태가 Open에서 Half-open으로 변경되기 전에 Circuit Breaker가 기다리는 시간
+  instances:
+    testCircuitBreaker:
+      baseConfig: default
+
+resilience4j.bulkhead:
+  instances:
+    testCircuitBreaker:
+      maxConcurrentCalls: 25
+      # 허가된 동시 실행 수를 25로 지정
+      maxWaitDuration: 0
+      # 포화 상태의 Bulkhead에 진입하기 위해 block 되는 최대 시간, 값이 0이므로 바로 요청을 막는다.
+
+resilience4j.ratelimiter:
+  instances:
+    testCircuitBreaker:
+      limitForPeriod: 50
+      # limitRefreshPeriod 기간 동안 허용되는 요청 수
+      limitRefreshPeriod: 500ns
+      # limit refresh 기간
+      timeoutDuration: 5s
+      # 허가를 위해 쓰레드가 대기하는 기본 시간
+      registerHealthIndicator: true
+
+# fallback method가 정의되어있지 않은 에러의 경우에만 재시도 한다.
+resilience4j.retry:
+  instances:
+    testCircuitBreaker:
+      maxRetryAttempts: 3
+      # 최대 재시도 수
+      waitDuration: 500ms
+      # 재시도 사이에 고정된 시간
+      retryExceptions:
+      # Empty 일 경우 모든 에러 클래스에 대해 재시도
+#        - org.springframework.web.client.HttpServerErrorException
+#        - io.github.resilience4j.circuitbreaker.Exception
+
+resilience4j.timelimiter:
+  instances:
+    testCircuitBreaker:
+      timeoutDuration: 1s
+      # 원격 서버로부터 해당 시간안에 응답이 오는 것을 제한
