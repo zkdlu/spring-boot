@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    gateway:
+      default-filters:
+      - name: GlobalFilter
+        args:
+          baseMessage: Gateway GlobalFilter
+          preLogger: true
+          postLogger: true
+      routes:
+      - id: demo-svc
+        uri: http://localhost:8081/
+        predicates: Path=/demo/**
+        filters:
+        - name: DemoFilter
+          args:
+            baseMessage: DemoFilter
+            preLogger: true
+            postLogger: true
