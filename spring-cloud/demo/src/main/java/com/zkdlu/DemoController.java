@@ -16,8 +16,18 @@ public class DemoController {
         this.demoService = demoService;
     }
 
-    @GetMapping
+    @GetMapping("/success")
     public String success() {
-        return demoService.greeting();
+        return demoService.success();
+    }
+
+    @GetMapping("/fail")
+    public String fail() {
+        return demoService.fail();
+    }
+
+    @GetMapping("/retry")
+    public String retry() {
+        return demoService.retry();
     }
 }

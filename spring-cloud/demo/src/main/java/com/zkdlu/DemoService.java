@@ -13,28 +13,29 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;
-import java.util.Random;
 
 @Service
 public class DemoService {
     private static final String TEST_CIRCUIT_BREAKER = "testCircuitBreaker";
 
     @CircuitBreaker(name = TEST_CIRCUIT_BREAKER, fallbackMethod = "helloFallback")
-    public String greeting() {
-        randomException();
-        return "hello";
+    public String success() {
+        return "success";
+    }
+
+    @CircuitBreaker(name = TEST_CIRCUIT_BREAKER, fallbackMethod = "helloFallback")
+    public String fail() {
+        throw new IllegalStateException("fail");
+    }
+
+    @CircuitBreaker(name = TEST_CIRCUIT_BREAKER, fallbackMethod = "helloFallback")
+    @Retry(name = TEST_CIRCUIT_BREAKER)
+    public String retry() {
+        throw new IllegalStateException("fail");
     }
 
     private String helloFallback(Throwable t) {
-        return "fallback invoked! exception type : " + t.getClass();
-    }
-
-    private void randomException() {
-        int randomInt = new Random().nextInt(10);
-
-        if(randomInt <= 7) {
-            throw new RuntimeException("failed");
-        }
+        return "fallback invoked!: " + t.getClass();
     }
 
     @Bulkhead(name = TEST_CIRCUIT_BREAKER)
