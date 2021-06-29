@@ -1,4 +1,5 @@
 rootProject.name = 'cloud'
 include 'gateway'
 include 'demo'
+include 'temp'
 

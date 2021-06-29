@@ -44,9 +44,9 @@ resilience4j.ratelimiter:
 resilience4j.retry:
   instances:
     testCircuitBreaker:
-      maxRetryAttempts: 3
+      maxRetryAttempts: 5
       # 최대 재시도 수
-      waitDuration: 5000ms
+      waitDuration: 10000
       # 재시도 사이에 고정된 시간
       retryExceptions:
       # Empty 일 경우 모든 에러 클래스에 대해 재시도
