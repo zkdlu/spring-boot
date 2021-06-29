@@ -54,4 +54,10 @@ project(':demo') {
     }
 }
 
+project(':eureka') {
+    dependencies {
+    }
+}
+
+
 

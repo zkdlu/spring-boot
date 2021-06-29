@@ -1,6 +1,7 @@
 
-
 spring:
+  application:
+    name: gateway
   cloud:
     gateway:
       default-filters:
@@ -10,8 +11,8 @@ spring:
           preLogger: true
           postLogger: true
       routes:
-      - id: demo-svc
-        uri: http://localhost:8081/
+      - id: demo
+        uri: lb://demo
         predicates: Path=/demo/**
         filters:
         - name: DemoFilter
@@ -20,3 +21,9 @@ spring:
             preLogger: true
             postLogger: true
 
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
