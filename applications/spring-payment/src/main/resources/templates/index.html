@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.min.js"></script>
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <title>상품목록</title>
+</head>
+<body>
+<div class="container" id="app" v-cloak>
+    <h1>상품 목록</h1>
+    <div id="parent" class="list-group" style="overflow: auto;">
+        <div v-for="items in groupedItems" class="row">
+            <div v-for="item in items" class="col-4">
+                <div class="panel" v-on:click="enterOrder(item.id)">
+                    <img v-bind:src="item.image" v-bind:id="item.id" style="margin:4px;">
+                    <div>
+                        <span>제품명: {{item.name}}</span>,<span>남은수량: {{item.stock}}</span>
+                    </div>
+                    <span>{{item.price}}원</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <transition name="fade">
+        <div class="loading" v-show="loading">
+            <span style="font-size:32px;">Loading</span>
+        </div>
+    </transition>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            loading: false,
+            limitNumber: 10,
+            page: 0,
+            items: []
+        },
+        created() {
+            this.getItems();
+        },
+        mounted() {
+            const that = this;
+
+            window.addEventListener('scroll', function(e) {
+                console.log(document.body.offsetHeight - window.innerHeight === window.scrollY);
+                if (document.body.offsetHeight - window.innerHeight === window.scrollY) {
+                    that.loadMore();
+                }
+            });
+        },
+        computed: {
+            groupedItems() {
+                const chunked = []
+
+                for (let element of this.items) {
+                    const last = chunked[chunked.length - 1]
+
+                    if (!last || last.length === 3) {
+                        chunked.push([element]);
+                    } else {
+                        last.push(element);
+                    }
+                }
+
+                return chunked.slice(0, this.limitNumber);
+            }
+        },
+        methods: {
+            enterOrder: function(productId) {
+                localStorage.setItem('product.id', productId);
+                location.href="/order/" + productId;
+            },
+            getItems: async function() {
+                await axios.get('/products/page/' + this.page).then(response => {
+                    this.items = this.items.concat(response.data);
+                });
+            },
+            loadMore: function() {
+                this.loading = true;
+
+                setTimeout(e => {
+                    this.limitNumber += 14;
+                    this.page += 1;
+
+                    this.getItems().then(response => {
+                        this.loading = false;
+                    });
+                }, 2000);
+            }
+        }
+    });
+</script>
+</body>
+</html>

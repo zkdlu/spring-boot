@@ -1,0 +1,11 @@
+server:
+  port: 8082
+
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+  thymeleaf:
+    cache: false

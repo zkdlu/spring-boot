@@ -1,5 +1,0 @@
-rootProject.name = 'app'
-include 'product-service'
-include 'display-service'
-include 'eureka-server'
-
