@@ -1,0 +1,21 @@
+#feign:
+#  client:
+#    config:
+#      demoClient:
+#        connectTimeout: 10000
+#        readTimeout: 1000
+#      default:
+#        connectTimeout: 10000
+#        readTimeout: 1000
+
+feign:
+  circuitbreaker:
+    enabled: true
+
+#
+#feign:
+#  client:
+#    config:
+#      default:
+#        connectTimeout: 1000
+#        readTimeout: 1000
