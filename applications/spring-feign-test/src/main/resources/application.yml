@@ -11,11 +11,8 @@
 feign:
   circuitbreaker:
     enabled: true
-
-#
-#feign:
-#  client:
-#    config:
-#      default:
-#        connectTimeout: 1000
-#        readTimeout: 1000
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 1000
