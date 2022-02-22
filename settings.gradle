@@ -16,3 +16,4 @@ include(':spring-service:product-service', ':spring-service:display-service', ':
 include(':spring-slack')
 include(':spring-tdd')
 include(':spring-feign-test')
+include(':spring-object-binding')
