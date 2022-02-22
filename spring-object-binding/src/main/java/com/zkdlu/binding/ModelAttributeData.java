@@ -1,12 +1,22 @@
 package com.zkdlu.binding;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 public class ModelAttributeData {
     @Getter
-    @AllArgsConstructor
-    public class ModelAttributeRequest {
+    @Setter
+    public static class ModelAttributeRequest {
+        private String id;
+        private String name;
+        private List<ModelAttributeItem> list;
+    }
+
+    @Setter
+    @Getter
+    public static class ModelAttributeItem {
         private String id;
         private String name;
     }

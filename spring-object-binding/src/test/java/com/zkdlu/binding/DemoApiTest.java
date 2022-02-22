@@ -59,6 +59,8 @@ class DemoApiTest {
 
             assertThat(spyDemoService.mapFrom_argumentModelAttribute.getId()).isEqualTo("id1");
             assertThat(spyDemoService.mapFrom_argumentModelAttribute.getName()).isEqualTo("name1");
+            assertThat(spyDemoService.mapFrom_argumentModelAttribute.getList().get(0).getId()).isEqualTo("list-id");
+            assertThat(spyDemoService.mapFrom_argumentModelAttribute.getList().get(0).getName()).isEqualTo("list-name");
         }
     }
 }
