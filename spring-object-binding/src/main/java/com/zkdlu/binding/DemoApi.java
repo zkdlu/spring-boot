@@ -1,13 +1,23 @@
 package com.zkdlu.binding;
 
+import com.zkdlu.binding.BodyData.BodyDataRequest;
+import com.zkdlu.binding.BodyData.BodyDataResponse;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DemoApi {
+    private final DemoService demoService;
+
+    public DemoApi(DemoService demoService) {
+        this.demoService = demoService;
+    }
 
     @PostMapping("/requestBody")
-    public void postWithRequestBody() {
-
+    public BodyDataResponse postWithRequestBody(@RequestBody BodyDataRequest body) {
+        return demoService.mapFrom(body);
     }
+
+
 }
